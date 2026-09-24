@@ -33,11 +33,6 @@
   .top h1{font-size:34px;font-weight:800;line-height:1.05;margin:4px 0 6px;letter-spacing:.2px;}
   .top .strap{font-size:13.5px;color:rgba(255,255,255,.82);max-width:560px;}
   .top .principle{font-size:12px;color:rgba(255,255,255,.65);margin-top:10px;font-style:italic;}
-  .top-meta{display:flex;gap:10px;flex-wrap:wrap;}
-  .mchip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:10px;
-    padding:8px 14px;text-align:center;min-width:78px;}
-  .mchip .n{font-size:20px;font-weight:800;font-family:var(--font-display);}
-  .mchip .l{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.68);margin-top:1px;}
 
   /* ---------- Scoreboard ribbon (Role Health, persistent) ---------- */
   .ribbon{margin-top:14px;background:var(--navy);border-radius:14px;padding:10px 14px;
@@ -109,32 +104,30 @@
   .quicklinks{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
 
   /* ---------- Visibility ---------- */
-  .vis-toggle{display:inline-flex;background:var(--grey-bg);border-radius:12px;padding:4px;gap:4px;margin-bottom:16px;}
-  .vt-btn{font-family:var(--font-display);font-weight:700;font-size:14px;padding:8px 20px;border:none;border-radius:9px;
-    background:transparent;color:var(--ink-soft);cursor:pointer;}
-  .vt-btn.active{background:var(--maroon);color:#fff;}
 
   .squad-col{border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:14px;background:#fdfdfc;}
   .squad-head{background:var(--navy);color:#fff;padding:10px 14px;font-family:var(--font-display);font-weight:700;font-size:16px;
     display:flex;justify-content:space-between;align-items:center;}
   .squad-head .cnt{background:var(--gold);color:var(--navy);border-radius:999px;padding:1px 9px;font-size:11px;font-weight:800;}
   .squad-body{padding:10px 14px;}
-  .id-row{display:flex;align-items:center;gap:10px;padding:8px 6px;border-bottom:1px solid var(--line);font-size:13px;cursor:pointer;}
+  .id-row{display:grid;grid-template-columns:minmax(120px,180px) minmax(110px,175px) 1fr;align-items:center;column-gap:18px;padding:10px 8px;border-bottom:1px solid var(--line);font-size:14px;cursor:pointer;}
+  .id-row.has-badge{grid-template-columns:minmax(120px,180px) minmax(110px,175px) 1fr minmax(100px,140px);}
+  .id-row.talent-cols{grid-template-columns:minmax(120px,180px) minmax(110px,175px) 1fr;}
   .id-row:last-child{border-bottom:none;}
   .id-row:hover{background:var(--tint);}
-  .id-row .nm{font-weight:700;flex:0 0 auto;min-width:130px;}
-  .id-row .tag{background:var(--tint);color:var(--maroon);border-radius:999px;padding:2px 9px;font-size:10.5px;font-weight:700;}
-  .id-row .club{color:var(--ink-soft);font-size:11.5px;flex:1;}
-  .cat-badge{font-size:10px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;border-radius:999px;padding:3px 9px;flex:0 0 auto;}
+  .id-row .nm{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .id-row .tag{background:var(--tint);color:var(--maroon);border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:700;justify-self:start;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .id-row .club{color:var(--ink-soft);font-size:12.5px;}
+  .cat-badge{font-size:11px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;border-radius:999px;padding:4px 10px;justify-self:start;}
   .cat-badge.rn{background:var(--green-bg);color:var(--green);} .cat-badge.rs{background:var(--amber-bg);color:var(--amber);}
-  .cat-badge.dv{background:var(--blue-bg);color:var(--blue);} .cat-badge.lt{background:var(--grey-bg);color:#6d6d78;}
+  .cat-badge.dv{background:var(--blue-bg);color:var(--blue);}
 
   .watch-list{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fdfdfc;}
-  .watch-row{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px dashed var(--line);font-size:13px;flex-wrap:wrap;}
+  .watch-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px dashed var(--line);font-size:14px;flex-wrap:wrap;}
   .watch-row:last-child{border-bottom:none;}
   .watch-row .nm{font-weight:700;flex:0 0 auto;min-width:130px;}
-  .watch-row .tag{background:var(--tint);color:var(--maroon);border-radius:999px;padding:2px 9px;font-size:10.5px;font-weight:700;flex:0 0 auto;}
-  .watch-row .note{color:var(--ink-soft);font-style:italic;font-size:12px;flex:1;min-width:160px;}
+  .watch-row .tag{background:var(--tint);color:var(--maroon);border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:700;flex:0 0 auto;}
+  .watch-row .note{color:var(--ink-soft);font-style:italic;font-size:13px;flex:1;min-width:160px;}
   .watch-row .wc-actions{display:flex;gap:6px;flex:0 0 auto;}
 
   .movement-panel{border-top:2px solid var(--line);margin-top:16px;padding-top:14px;}
@@ -188,9 +181,10 @@
     padding:6px 14px;font-size:11.5px;font-weight:700;color:var(--ink-soft);cursor:pointer;border:1px solid transparent;}
   .rh-badge:hover{border-color:var(--maroon);}
 
-  .env-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;}
-  @media(max-width:1100px){.env-grid{grid-template-columns:repeat(2,1fr);}}
-  @media(max-width:620px){.env-grid{grid-template-columns:1fr;}}
+  .env-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:14px;}
+  @media(max-width:1300px){.env-grid{grid-template-columns:repeat(3,1fr);}}
+  @media(max-width:820px){.env-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:480px){.env-grid{grid-template-columns:1fr;}}
   .env-col{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fdfdfc;}
   .env-head{background:var(--navy);color:#fff;padding:10px 12px;font-family:var(--font-display);
     font-weight:700;font-size:15px;letter-spacing:.4px;display:flex;justify-content:space-between;align-items:center;}
@@ -204,12 +198,11 @@
   .cat-lab.rn{color:var(--green);} .cat-lab.rn::before{background:var(--green);}
   .cat-lab.rs{color:var(--amber);} .cat-lab.rs::before{background:var(--amber);}
   .cat-lab.dv{color:var(--blue);} .cat-lab.dv::before{background:var(--blue);}
-  .cat-lab.lt{color:var(--grey);} .cat-lab.lt::before{background:var(--grey);}
-  .athlete-chip{background:#fff;border:1px solid var(--line);border-radius:9px;padding:6px 9px;
-    font-size:12.5px;font-weight:600;margin-bottom:5px;display:flex;align-items:center;gap:6px;cursor:pointer;
+  .athlete-chip{background:#fff;border:1px solid var(--line);border-radius:9px;padding:7px 10px;
+    font-size:13.5px;font-weight:600;margin-bottom:5px;display:flex;align-items:center;gap:7px;cursor:pointer;
     transition:border-color .12s,box-shadow .12s;}
   .athlete-chip:hover{border-color:var(--maroon);box-shadow:0 0 0 1px var(--maroon);}
-  .athlete-chip .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .athlete-chip .nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
   .cat-empty{font-size:11px;color:#bcb9c0;padding:3px 2px;font-style:italic;}
 
   /* ---------- Opportunities ---------- */
@@ -269,8 +262,18 @@
   /* ---------- Modal ---------- */
   .modal-bg{display:none;position:fixed;inset:0;background:rgba(20,15,20,.5);z-index:100;align-items:center;justify-content:center;padding:20px;}
   .modal-bg.active{display:flex;}
-  .modal{background:#fff;border-radius:18px;max-width:640px;width:100%;max-height:84vh;overflow-y:auto;padding:26px 28px;box-shadow:0 20px 60px rgba(0,0,0,.3);position:relative;}
-  .modal h3{font-size:24px;color:var(--maroon);font-weight:800;margin-bottom:4px;}
+  .modal{background:#fff;border-radius:18px;max-width:640px;width:100%;max-height:84vh;overflow-y:auto;padding:26px 28px;box-shadow:0 20px 60px rgba(0,0,0,.3);position:relative;transition:max-width .15s;}
+  .modal.wide{max-width:1160px;}
+  .modal-split{display:flex;gap:24px;}
+  .modal-split #modalContent{flex:1;min-width:0;}
+  .modal-split #modalSidePanel{flex:0 0 0;min-width:0;overflow:hidden;transition:flex-basis .15s;}
+  .modal.wide .modal-split #modalSidePanel{flex:0 0 500px;border-left:1px solid var(--line);padding-left:20px;}
+  @media(max-width:820px){
+    .modal.wide{max-width:640px;}
+    .modal-split{flex-direction:column;}
+    .modal.wide .modal-split #modalSidePanel{flex:0 0 auto;border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:16px;}
+  }
+  .modal h3{font-size:28px;color:var(--maroon);font-weight:800;margin-bottom:14px;padding-bottom:14px;border-bottom:2px solid var(--line);letter-spacing:.2px;}
   .modal .draft-tag{display:inline-block;background:var(--amber-bg);color:var(--amber);font-size:10.5px;
     font-weight:800;letter-spacing:.5px;text-transform:uppercase;border-radius:999px;padding:3px 10px;margin-bottom:14px;}
   .modal .close{position:absolute;top:18px;right:20px;background:none;border:none;font-size:22px;color:var(--ink-soft);cursor:pointer;}
@@ -284,6 +287,13 @@
   .mfield{margin-bottom:12px;}
   .mfield label{display:block;font-size:10.5px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--rust);margin-bottom:5px;}
   .mfield select,.mfield input,.mfield textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;}
+  .collapse-h{font-size:13.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--maroon);
+    cursor:pointer;user-select:none;padding:12px 14px;margin-top:10px;display:flex;align-items:center;gap:9px;
+    background:var(--tint);border-radius:10px;transition:background .12s;}
+  .collapse-h:hover{background:var(--grey-bg);}
+  .collapse-h .set-tag{color:var(--ink-soft);font-weight:600;text-transform:none;letter-spacing:0;margin-left:2px;}
+  .collapse-arrow{display:inline-block;width:10px;color:var(--maroon);font-weight:800;font-size:12px;}
+  .collapse-body{padding:14px 4px 4px;}
 
   /* ---------- Individual Player Plan (season-on-season, player-owned) ---------- */
   .dev-section{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);}
@@ -307,6 +317,27 @@
   .dev-add-row input{flex:1;border:1px solid var(--line);border-radius:8px;padding:7px 10px;font-size:12.5px;}
   .dev-commit-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
   @media(max-width:520px){.dev-commit-grid{grid-template-columns:1fr;}}
+
+  /* ---------- Talent Projection ---------- */
+  .talent-row{display:grid;grid-template-columns:1fr 90px;align-items:center;gap:12px;margin-bottom:10px;}
+  .talent-row input[type=range]{width:100%;accent-color:var(--maroon);height:6px;}
+  .talent-score{background:var(--amber-bg);color:var(--amber);font-weight:800;font-family:var(--font-display);
+    font-size:15px;border-radius:8px;padding:5px 0;text-align:center;}
+  .talent-list{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fdfdfc;}
+  .talent-badges{display:flex;align-items:center;gap:8px;justify-self:start;}
+  .talent-badge{font-size:11.5px;font-weight:700;border-radius:7px;padding:5px 10px;background:var(--tint);color:var(--ink-soft);
+    display:flex;align-items:center;gap:5px;white-space:nowrap;}
+  .talent-badge .tbl{letter-spacing:.3px;text-transform:uppercase;font-size:9.5px;opacity:.75;}
+  .talent-badge b{font-size:13px;font-weight:800;color:var(--ink);}
+  .talent-badge.ovr{background:var(--amber-bg);color:var(--amber);padding:5px 11px;}
+  .talent-badge.ovr b{color:var(--amber);font-size:14px;}
+  .talent-scale-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  .talent-scale-table td{padding:5px 10px;border-bottom:1px solid var(--line);}
+  .talent-scale-table td:last-child{white-space:nowrap;}
+  .talent-scale-table tr.band td{font-weight:800;text-transform:uppercase;font-size:11px;letter-spacing:.5px;padding:7px 10px;}
+  .talent-scale-table tr.band.intl td{background:#dcefe2;}
+  .talent-scale-table tr.band.state td{background:#fbe7bd;}
+  .talent-scale-table tr.band.pathway td{background:#fbf6c9;}
   .dev-textarea{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;resize:vertical;margin-bottom:4px;}
   .dev-textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 2px rgba(253,183,39,.25);}
   select{-webkit-appearance:none;}
@@ -356,38 +387,43 @@
         <div class="kicker">Queensland Cricket</div>
         <h1>Men's Pathway System</h1>
       </div>
-      <div class="top-meta" id="headerCounts"></div>
     </div>
-    <div class="ribbon" id="scoreboard"></div>
   </div>
 
   <div class="tabs" id="tabs">
-    <button class="tab active" data-view="visibility">Visibility</button>
+    <button class="tab active" data-view="squads">Identified Squads</button>
+    <button class="tab" data-view="watchlist">Watchlist</button>
     <button class="tab" data-view="readiness">Readiness</button>
+    <button class="tab" data-view="talent">Talent</button>
     <div class="tab-spacer"></div>
-    <span class="output-lab">Output</span>
-    <button class="tab output" data-view="succession">Succession</button>
   </div>
 
-  <!-- VISIBILITY (LANDING) -->
-  <div class="view active" id="view-visibility">
+  <!-- IDENTIFIED SQUADS -->
+  <div class="view active" id="view-squads">
     <div class="card">
-      <div style="margin-bottom:6px;">
-        <div class="vis-toggle">
-          <button class="vt-btn active" id="vtIdentified" onclick="setVisMode('identified')">Identified Squads</button>
-          <button class="vt-btn" id="vtWatch" onclick="setVisMode('watchlist')">Watchlist</button>
-        </div>
-      </div>
-
       <div id="identifiedPane"></div>
-      <div id="watchlistPane" style="display:none;"></div>
 
-      <div class="movement-panel" id="movementPanel">
-        <h2 style="margin-bottom:10px;cursor:pointer;user-select:none;" onclick="toggleMovementPanel()">
-          Recent Movement<span class="sub" id="mvSub"></span>
-          <span id="mvToggleIcon" style="margin-left:8px;color:var(--maroon);font-weight:700;">▸ Show</span>
+      <div class="movement-panel" id="movementPanel-squads">
+        <h2 style="margin-bottom:10px;cursor:pointer;user-select:none;" onclick="toggleMovementPanel('squads')">
+          Recent Movement<span class="sub" id="mvSub-squads"></span>
+          <span id="mvToggleIcon-squads" style="margin-left:8px;color:var(--maroon);font-weight:700;">▸ Show</span>
         </h2>
-        <div class="mv-feed" id="mvFeed" style="display:none;"></div>
+        <div class="mv-feed" id="mvFeed-squads" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WATCHLIST -->
+  <div class="view" id="view-watchlist">
+    <div class="card">
+      <div id="watchlistPane"></div>
+
+      <div class="movement-panel" id="movementPanel-watchlist">
+        <h2 style="margin-bottom:10px;cursor:pointer;user-select:none;" onclick="toggleMovementPanel('watchlist')">
+          Recent Movement<span class="sub" id="mvSub-watchlist"></span>
+          <span id="mvToggleIcon-watchlist" style="margin-left:8px;color:var(--maroon);font-weight:700;">▸ Show</span>
+        </h2>
+        <div class="mv-feed" id="mvFeed-watchlist" style="display:none;"></div>
       </div>
     </div>
   </div>
@@ -398,22 +434,26 @@
       <div class="rd-controls">
         <select class="pg-select" id="pgSelect"></select>
         <button class="btn ghost" id="viewProfileBtn">View Readiness Profile</button>
+        <span id="successorFlag"></span>
       </div>
       <div class="env-grid" id="envGrid"></div>
+    </div>
+  </div>
+
+  <!-- TALENT PROJECTION -->
+  <div class="view" id="view-talent">
+    <div class="card">
+      <div class="rd-controls">
+        <span onclick="openTalentScale()" style="font-size:12.5px;color:var(--maroon);text-decoration:underline;cursor:pointer;">View Rating Scale</span>
+      </div>
+      <p style="font-size:12px;color:var(--ink-soft);margin-bottom:14px;">The athlete as a whole, projected against international standard — not tied to a specific skill or role. Rated from the athlete's edit screen.</p>
+      <div id="talentList"></div>
     </div>
   </div>
 
   <!-- PLAYER PLANS (dedicated screen — search the whole roster, then a full-page plan) -->
   <div class="view" id="view-plans">
     <div class="card" id="plansContent"></div>
-  </div>
-
-  <!-- SUCCESSION (OUTPUT) -->
-  <div class="view" id="view-succession">
-    <div class="card output-card">
-      <h2>Role Health<span class="sub">By environment — read-only, edit from Readiness</span></h2>
-      <table class="rh-table"><thead><tr><th>Position Group</th>${SQUADS.map(sq=>`<th>${sq}</th>`).join('')}<th></th></tr></thead><tbody id="rhBody"></tbody></table>
-    </div>
   </div>
 
 </div>
@@ -425,25 +465,30 @@
 </div>
 
 <div class="modal-bg" id="modalBg">
-  <div class="modal"><button class="close" id="modalClose">&times;</button><div id="modalContent"></div></div>
+  <div class="modal" id="modalBox"><button class="close" id="modalClose">&times;</button>
+    <div class="modal-split">
+      <div id="modalContent"></div>
+      <div id="modalSidePanel"></div>
+    </div>
+  </div>
 </div>
 
 <div class="toolbar">
   <span class="hint" id="syncStatus">Connecting…</span>
+  <button class="btn ghost" onclick="openBackups()">Local Backups</button>
   <button class="btn gold" onclick="window.print()">Print / Export</button>
 </div>
 
 <script>
 /* ============ DATA MODEL ============ */
-const POSITION_GROUPS = ['Opening Batters','Middle Order Batters','Batting All-Rounders','Bowling All-Rounders','Pace Bowlers','Spin Bowlers','Wicket Keepers','Leadership'];
+const POSITION_GROUPS = ['Opening Batters','Middle Order Batters','All-Rounders','Pace Bowlers','Spin Bowlers','Wicket Keepers','Leadership'];
 const SQUADS = ['U17','U19','2nd XI','Bulls','Brisbane Heat']; // pathway order — State Squad removed, merged into Bulls; Heat sits below Bulls
 const GATES = [['U17','U19'],['U19','2nd XI'],['2nd XI','Bulls']];
-const CATEGORIES = [{key:'Ready Now',cls:'rn'},{key:'Ready With Support',cls:'rs'},{key:'Developing',cls:'dv'},{key:'Long-Term',cls:'lt'}];
+const CATEGORIES = [{key:'Ready',cls:'rn'},{key:'Next',cls:'rs'},{key:'Developing',cls:'dv'}];
 const CATEGORY_Q = {
-  'Ready Now':'Would we confidently provide the next opportunity?',
-  'Ready With Support':'What experiences do we need to create to build readiness?',
-  'Developing':'What should we create next?',
-  'Long-Term':'How do we continue supporting progression?'
+  'Ready':'Would we confidently provide the next opportunity?',
+  'Next':'What experiences do we need to create to build readiness?',
+  'Developing':'What should we create next?'
 };
 const OPP_TYPES = ['2nd XI Exposure','Bulls Environment Exposure','Championship Exposure','Leadership Exposure','Specialist Coaching','Interstate Opportunity'];
 const OPP_STATUSES = ['Identified','Planned','In Progress','Completed'];
@@ -507,13 +552,35 @@ function applyState(s){
   migrateState();
 }
 // Fills in any squad/program missing from data saved before it existed (e.g. Brisbane Heat).
+const LEGACY_CATEGORY_MAP = { 'Ready Now':'Ready', 'Ready With Support':'Next', 'Long-Term':'Developing' };
 function migrateState(){
   POSITION_GROUPS.forEach(g=>{
     if(!roleHealth[g]) roleHealth[g] = {};
     SQUADS.forEach(sq=>{ if(!roleHealth[g][sq]) roleHealth[g][sq] = 'grey'; });
+    ['Bulls-Shield','Bulls-OneDay'].forEach(k=>{ if(!roleHealth[g][k]) roleHealth[g][k] = 'grey'; });
   });
   SQUADS.forEach(sq=>{ if(!GAMES[sq]) GAMES[sq] = []; });
-  athletes.forEach(a=>ensureDev(a));
+  athletes.forEach(a=>{
+    ensureDev(a);
+    if(a.cat && LEGACY_CATEGORY_MAP[a.cat]) a.cat = LEGACY_CATEGORY_MAP[a.cat];
+    if(a.catOneDay && LEGACY_CATEGORY_MAP[a.catOneDay]) a.catOneDay = LEGACY_CATEGORY_MAP[a.catOneDay];
+    if(a.squad==='Bulls' && !a.pgOneDay && (a.catOneDay || a.depthOrderOneDay!=null)) a.pgOneDay = a.pg;
+    if(a.pg==='Batting All-Rounders'){ a.pg='All-Rounders'; a.arAlsoBatting=true; }
+    if(a.pg==='Bowling All-Rounders'){ a.pg='All-Rounders'; a.arAlsoBowling=true; }
+    if(a.pgOneDay==='Batting All-Rounders'){ a.pgOneDay='All-Rounders'; a.arAlsoBattingOneDay=true; }
+    if(a.pgOneDay==='Bowling All-Rounders'){ a.pgOneDay='All-Rounders'; a.arAlsoBowlingOneDay=true; }
+    if(!Array.isArray(a.secondary)) a.secondary = [];
+    if(!Array.isArray(a.secondaryOneDay)) a.secondaryOneDay = [];
+    // One-time upgrade from the earlier simple Batting/Bowling toggle into a real, rankable secondary skill entry.
+    if(a.arAlsoBatting && !a.secondary.some(s=>s.pg==='Middle Order Batters')){ a.secondary.push({pg:'Middle Order Batters', cat:CAT_STEP_DOWN[a.cat]||'Next', depthOrder:null}); }
+    if(a.arAlsoBowling && !a.secondary.some(s=>s.pg==='Pace Bowlers')){ a.secondary.push({pg:'Pace Bowlers', cat:CAT_STEP_DOWN[a.cat]||'Next', depthOrder:null}); }
+    if(a.arAlsoBattingOneDay && !a.secondaryOneDay.some(s=>s.pg==='Middle Order Batters')){ a.secondaryOneDay.push({pg:'Middle Order Batters', cat:CAT_STEP_DOWN[a.catOneDay]||'Next', depthOrder:null}); }
+    if(a.arAlsoBowlingOneDay && !a.secondaryOneDay.some(s=>s.pg==='Pace Bowlers')){ a.secondaryOneDay.push({pg:'Pace Bowlers', cat:CAT_STEP_DOWN[a.catOneDay]||'Next', depthOrder:null}); }
+    delete a.arAlsoBatting; delete a.arAlsoBowling; delete a.arAlsoBattingOneDay; delete a.arAlsoBowlingOneDay;
+    // Backfill for any secondary entry saved before per-skill Readiness Category existed — defaults one step down from the main skill, editable afterwards.
+    a.secondary.forEach(s=>{ if(!s.cat) s.cat = CAT_STEP_DOWN[a.cat] || 'Next'; });
+    a.secondaryOneDay.forEach(s=>{ if(!s.cat) s.cat = CAT_STEP_DOWN[a.catOneDay] || 'Next'; });
+  });
 }
 async function loadState(){
   if(!JSONBIN_ENABLED){
@@ -542,6 +609,38 @@ function scheduleSave(){
   clearTimeout(saveTimer);
   saveTimer = setTimeout(saveState, 800);
 }
+// Rolling local backup — kept in this browser only, separate from JSONBin. Not a substitute for a
+// real off-device backup, but protects against a bad save or a JSONBin outage losing recent work outright.
+function saveLocalBackup(state){
+  try{
+    const key = 'qc_pathway_backups';
+    let backups = [];
+    try{ backups = JSON.parse(localStorage.getItem(key)) || []; }catch(e){ backups = []; }
+    backups.unshift({ time: new Date().toISOString(), state });
+    backups = backups.slice(0, 10); // keep last 10 saves
+    localStorage.setItem(key, JSON.stringify(backups));
+  }catch(e){ console.error('Local backup failed (non-fatal)', e); }
+}
+function listLocalBackups(){
+  try{ return JSON.parse(localStorage.getItem('qc_pathway_backups')) || []; }catch(e){ return []; }
+}
+function restoreLocalBackup(index){
+  const backups = listLocalBackups();
+  const b = backups[index]; if(!b) return;
+  if(!confirm(`Restore the backup from ${new Date(b.time).toLocaleString()}? This replaces everything currently on screen (not yet saved to JSONBin until you make another change).`)) return;
+  applyState(b.state);
+  migrateState();
+  closeModal();
+  renderAllNoSave();
+  setSyncStatus('Restored from local backup — not yet saved', '#C98A16');
+}
+function openBackups(){
+  const backups = listLocalBackups();
+  document.getElementById('modalContent').innerHTML = `<h3>Local Backups</h3>
+    <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:16px;">Kept on this device only, most recent 10 saves. Restoring loads a snapshot back onto the screen — it isn't saved to JSONBin until something changes again.</p>
+    ${backups.length ? backups.map((b,i)=>`<div class="id-row" onclick="restoreLocalBackup(${i})"><span class="nm">${new Date(b.time).toLocaleString()}</span><span class="club" style="flex:1;">${b.state.athletes ? b.state.athletes.length : '?'} athletes</span><button class="btn ghost sm">Restore</button></div>`).join('') : `<div class="cat-empty">No local backups yet on this device.</div>`}`;
+  openModal();
+}
 async function saveState(){
   try{
     // Check whether someone else has saved since we last synced, before writing.
@@ -560,10 +659,13 @@ async function saveState(){
       }
     }
     stateRev = lastSyncedRev + 1;
+    const stateToSave = collectState();
+    stateToSave._rev = stateRev;
+    saveLocalBackup(stateToSave);
     const res = await fetch(JSONBIN_URL, {
       method:'PUT',
       headers:{ 'Content-Type':'application/json', 'X-Master-Key': JSONBIN_API_KEY },
-      body: JSON.stringify(collectState())
+      body: JSON.stringify(stateToSave)
     });
     if(!res.ok) throw new Error('HTTP '+res.status);
     lastSyncedRev = stateRev;
@@ -587,17 +689,11 @@ const PROFILES = {
     Performance:['Contribute consistently','Perform under pressure','Influence outcomes'],
     Behaviours:['Resilient','Competitive','Adaptable','Dependable']
   }},
-  'Batting All-Rounders': {draft:false, groups:{
-    Technical:['Top 6 batting capability','Effective second-skill bowling option','Assessed against the standard for both skills — not just one'],
+  'All-Rounders': {draft:false, groups:{
+    Technical:['Genuine top 6 batting capability or genuine wicket-taking bowling option — assessed on whichever is their primary discipline','Effective, credible second-skill contribution','Assessed against the standard for both skills — not just one'],
     Tactical:['Read the game with bat and ball','Understand role balance across formats','Adapt contribution to match situation'],
     Performance:['Consistent contribution with both bat and ball','Perform against quality opposition in both disciplines'],
-    Behaviours:['Versatile','Team-first mindset','Coachable']
-  }},
-  'Bowling All-Rounders': {draft:true, groups:{
-    Technical:['Genuine wicket-taking bowling option','Lower-order batting that adds value','Ability to hold an end or attack depending on need'],
-    Tactical:['Understand role balance across formats','Read match situation with ball and bat'],
-    Performance:['Consistent bowling impact','Contributes runs when required'],
-    Behaviours:['Competitive','Versatile','Reliable under workload']
+    Behaviours:['Versatile','Team-first mindset','Coachable','Competitive','Reliable under workload']
   }},
   'Pace Bowlers': {draft:false, groups:{
     Technical:['Consistent release and repeatability','Ability to hit key areas','Move the ball','Change lengths','Execute variations','High pace capability or a genuine point of difference'],
@@ -626,66 +722,66 @@ const PROFILES = {
 
 // Seed data — real names from State_Male_Depth_Chart.xlsx (see chat for full sourcing notes)
 let athletes = [
-  {id:1,name:'Marnus Labuschagne',pg:'Middle Order Batters',club:'Redlands',status:'identified',squad:'Bulls',cat:'Ready Now'},
+  {id:1,name:'Marnus Labuschagne',pg:'Middle Order Batters',club:'Redlands',status:'identified',squad:'Bulls',cat:'Ready'},
   {id:2,name:'Matthew Renshaw',pg:'Opening Batters',club:'',status:'identified',squad:'Bulls',cat:'Developing'},
-  {id:3,name:'Jack Clayton',pg:'Middle Order Batters',club:'University',status:'identified',squad:'Bulls',cat:'Ready Now'},
-  {id:4,name:'Lachlan Hearne',pg:'Middle Order Batters',club:'Toombul',status:'identified',squad:'Bulls',cat:'Ready Now'},
-  {id:5,name:'Hugo Burdon',pg:'Opening Batters',club:'Gold Coast',status:'identified',squad:'Bulls',cat:'Ready With Support'},
-  {id:6,name:'Angus Lovell',pg:'Opening Batters',club:'University',status:'identified',squad:'Bulls',cat:'Ready With Support'},
-  {id:7,name:'James Peirson',pg:'Wicket Keepers',club:'Redlands',status:'identified',squad:'Bulls',cat:'Ready Now'},
-  {id:8,name:'Hugh Weibgen',pg:'Middle Order Batters',club:'Valleys',status:'identified',squad:'Bulls',cat:'Ready With Support'},
-  {id:9,name:'Dylan McLachlan',pg:'Wicket Keepers',club:'Valleys',status:'identified',squad:'Bulls',cat:'Ready With Support'},
-  {id:10,name:'Michael Neser',pg:'Bowling All-Rounders',club:'Gold Coast',status:'identified',squad:'Bulls',cat:'Ready Now'},
-  {id:11,name:'Xavier Bartlett',pg:'Bowling All-Rounders',club:'Gold Coast',status:'identified',squad:'Bulls',cat:'Ready Now'},
-  {id:12,name:'Jack Wildermuth',pg:'Batting All-Rounders',club:'Valleys',status:'identified',squad:'Bulls',cat:'Ready Now'},
-  {id:13,name:'Hayden Kerr',pg:'Bowling All-Rounders',club:'Gold Coast',status:'identified',squad:'Bulls',cat:'Ready With Support'},
-  {id:14,name:'Cameron Gannon',pg:'Pace Bowlers',club:'Norths',status:'identified',squad:'Bulls',cat:'Ready Now'},
-  {id:15,name:'Callum Vidler',pg:'Pace Bowlers',club:'Valleys',status:'identified',squad:'Bulls',cat:'Ready With Support'},
-  {id:16,name:'Mark Steketee',pg:'Pace Bowlers',club:'Valleys',status:'identified',squad:'Bulls',cat:'Ready Now'},
-  {id:17,name:'Tom Balkin',pg:'Pace Bowlers',club:'Toombul',status:'identified',squad:'Bulls',cat:'Ready With Support'},
-  {id:18,name:'Jem Ryan',pg:'Pace Bowlers',club:'Ipswich',status:'identified',squad:'Bulls',cat:'Ready With Support'},
-  {id:19,name:'Tom Straker',pg:'Pace Bowlers',club:'Valleys',status:'identified',squad:'Bulls',cat:'Ready With Support'},
-  {id:20,name:'Tom Whitney',pg:'Pace Bowlers',club:'Wests',status:'identified',squad:'Bulls',cat:'Ready With Support'},
-  {id:22,name:'Max Bryant',pg:'Middle Order Batters',club:'Valleys',status:'identified',squad:'2nd XI',cat:'Ready Now'},
-  {id:23,name:'Scott Palombo',pg:'Middle Order Batters',club:'Norths',status:'identified',squad:'2nd XI',cat:'Ready Now'},
-  {id:25,name:'Jackson Sinfield',pg:'Spin Bowlers',club:'Redlands',status:'identified',squad:'Bulls',cat:'Ready With Support'},
+  {id:3,name:'Jack Clayton',pg:'Middle Order Batters',club:'University',status:'identified',squad:'Bulls',cat:'Ready'},
+  {id:4,name:'Lachlan Hearne',pg:'Middle Order Batters',club:'Toombul',status:'identified',squad:'Bulls',cat:'Ready'},
+  {id:5,name:'Hugo Burdon',pg:'Opening Batters',club:'Gold Coast',status:'identified',squad:'Bulls',cat:'Next'},
+  {id:6,name:'Angus Lovell',pg:'Opening Batters',club:'University',status:'identified',squad:'Bulls',cat:'Next'},
+  {id:7,name:'James Peirson',pg:'Wicket Keepers',club:'Redlands',status:'identified',squad:'Bulls',cat:'Ready'},
+  {id:8,name:'Hugh Weibgen',pg:'Middle Order Batters',club:'Valleys',status:'identified',squad:'Bulls',cat:'Next'},
+  {id:9,name:'Dylan McLachlan',pg:'Wicket Keepers',club:'Valleys',status:'identified',squad:'Bulls',cat:'Next'},
+  {id:10,name:'Michael Neser',pg:'Bowling All-Rounders',club:'Gold Coast',status:'identified',squad:'Bulls',cat:'Ready'},
+  {id:11,name:'Xavier Bartlett',pg:'Bowling All-Rounders',club:'Gold Coast',status:'identified',squad:'Bulls',cat:'Ready'},
+  {id:12,name:'Jack Wildermuth',pg:'Batting All-Rounders',club:'Valleys',status:'identified',squad:'Bulls',cat:'Ready'},
+  {id:13,name:'Hayden Kerr',pg:'Bowling All-Rounders',club:'Gold Coast',status:'identified',squad:'Bulls',cat:'Next'},
+  {id:14,name:'Cameron Gannon',pg:'Pace Bowlers',club:'Norths',status:'identified',squad:'Bulls',cat:'Ready'},
+  {id:15,name:'Callum Vidler',pg:'Pace Bowlers',club:'Valleys',status:'identified',squad:'Bulls',cat:'Next'},
+  {id:16,name:'Mark Steketee',pg:'Pace Bowlers',club:'Valleys',status:'identified',squad:'Bulls',cat:'Ready'},
+  {id:17,name:'Tom Balkin',pg:'Pace Bowlers',club:'Toombul',status:'identified',squad:'Bulls',cat:'Next'},
+  {id:18,name:'Jem Ryan',pg:'Pace Bowlers',club:'Ipswich',status:'identified',squad:'Bulls',cat:'Next'},
+  {id:19,name:'Tom Straker',pg:'Pace Bowlers',club:'Valleys',status:'identified',squad:'Bulls',cat:'Next'},
+  {id:20,name:'Tom Whitney',pg:'Pace Bowlers',club:'Wests',status:'identified',squad:'Bulls',cat:'Next'},
+  {id:22,name:'Max Bryant',pg:'Middle Order Batters',club:'Valleys',status:'identified',squad:'2nd XI',cat:'Ready'},
+  {id:23,name:'Scott Palombo',pg:'Middle Order Batters',club:'Norths',status:'identified',squad:'2nd XI',cat:'Ready'},
+  {id:25,name:'Jackson Sinfield',pg:'Spin Bowlers',club:'Redlands',status:'identified',squad:'Bulls',cat:'Next'},
   {id:63,name:'Aryan Jain',pg:'Opening Batters',club:'Norths',status:'identified',squad:'2nd XI',cat:'Developing'},
   {id:64,name:'Tom Campbell',pg:'Middle Order Batters',club:'Wests',status:'identified',squad:'Bulls',cat:'Developing'},
   {id:65,name:'Steve McGiffin',pg:'Batting All-Rounders',club:'Wests',status:'identified',squad:'2nd XI',cat:'Developing'},
-  {id:66,name:'Isaiah Snell',pg:'Middle Order Batters',club:'Wests',status:'identified',squad:'2nd XI',cat:'Ready With Support'},
-  {id:67,name:'Zanden Jeh',pg:'Middle Order Batters',club:'Souths',status:'identified',squad:'2nd XI',cat:'Ready With Support'},
-  {id:68,name:'Sam Geyer',pg:'Pace Bowlers',club:'Wests',status:'identified',squad:'2nd XI',cat:'Ready With Support'},
-  {id:69,name:'Sam Skelly',pg:'Pace Bowlers',club:'Norths',status:'identified',squad:'2nd XI',cat:'Ready Now'},
-  {id:70,name:'Will Sanders',pg:'Bowling All-Rounders',club:'University',status:'identified',squad:'2nd XI',cat:'Long-Term'},
-  {id:71,name:'Hugh Taylor',pg:'Middle Order Batters',club:'Gold Coast',status:'identified',squad:'U17',cat:'Ready Now'},
-  {id:72,name:'Benji Floros',pg:'Pace Bowlers',club:'Valleys',status:'identified',squad:'2nd XI',cat:'Ready Now'},
-  {id:73,name:'Zac McDermott',pg:'Pace Bowlers',club:'Gold Coast',status:'identified',squad:'2nd XI',cat:'Ready With Support'},
+  {id:66,name:'Isaiah Snell',pg:'Middle Order Batters',club:'Wests',status:'identified',squad:'2nd XI',cat:'Next'},
+  {id:67,name:'Zanden Jeh',pg:'Middle Order Batters',club:'Souths',status:'identified',squad:'2nd XI',cat:'Next'},
+  {id:68,name:'Sam Geyer',pg:'Pace Bowlers',club:'Wests',status:'identified',squad:'2nd XI',cat:'Next'},
+  {id:69,name:'Sam Skelly',pg:'Pace Bowlers',club:'Norths',status:'identified',squad:'2nd XI',cat:'Ready'},
+  {id:70,name:'Will Sanders',pg:'Bowling All-Rounders',club:'University',status:'identified',squad:'2nd XI',cat:'Developing'},
+  {id:71,name:'Hugh Taylor',pg:'Middle Order Batters',club:'Gold Coast',status:'identified',squad:'U17',cat:'Ready'},
+  {id:72,name:'Benji Floros',pg:'Pace Bowlers',club:'Valleys',status:'identified',squad:'2nd XI',cat:'Ready'},
+  {id:73,name:'Zac McDermott',pg:'Pace Bowlers',club:'Gold Coast',status:'identified',squad:'2nd XI',cat:'Next'},
   {id:29,name:'Steven Hogan',pg:'Middle Order Batters',club:'Sandgate',status:'identified',squad:'Bulls',cat:'Developing'},
-  {id:32,name:'Sohann Sharma',pg:'Opening Batters',club:'Wests',status:'identified',squad:'U19',cat:'Ready Now'},
-  {id:34,name:'Ben Gordon',pg:'Pace Bowlers',club:'Sunshine Coast',status:'identified',squad:'U19',cat:'Ready Now'},
-  {id:36,name:'Thomas Town',pg:'Pace Bowlers',club:'Sunshine Coast',status:'identified',squad:'U19',cat:'Ready With Support'},
-  {id:37,name:'Tom King',pg:'Pace Bowlers',club:'Cairns',status:'identified',squad:'U19',cat:'Ready With Support'},
-  {id:38,name:'Charlie Kruger',pg:'Pace Bowlers',club:'Ipswich',status:'identified',squad:'U19',cat:'Ready With Support'},
+  {id:32,name:'Sohann Sharma',pg:'Opening Batters',club:'Wests',status:'identified',squad:'U19',cat:'Ready'},
+  {id:34,name:'Ben Gordon',pg:'Pace Bowlers',club:'Sunshine Coast',status:'identified',squad:'U19',cat:'Ready'},
+  {id:36,name:'Thomas Town',pg:'Pace Bowlers',club:'Sunshine Coast',status:'identified',squad:'U19',cat:'Next'},
+  {id:37,name:'Tom King',pg:'Pace Bowlers',club:'Cairns',status:'identified',squad:'U19',cat:'Next'},
+  {id:38,name:'Charlie Kruger',pg:'Pace Bowlers',club:'Ipswich',status:'identified',squad:'U19',cat:'Next'},
   {id:39,name:'Cale Anderson',pg:'Bowling All-Rounders',club:'Brothers Bundaberg',status:'identified',squad:'U17',cat:'Developing'},
   {id:40,name:'Arush Sharma',pg:'Bowling All-Rounders',club:'University',status:'identified',squad:'U17',cat:'Developing'},
   {id:41,name:'Lachlan Pask',pg:'Batting All-Rounders',club:'Redlands',status:'identified',squad:'U17',cat:'Developing'},
-  {id:43,name:'Dushyant Thaman',pg:'Spin Bowlers',club:'Souths',status:'identified',squad:'U19',cat:'Ready Now'},
-  {id:44,name:'Lakshdeep Singh',pg:'Spin Bowlers',club:'Sandgate',status:'identified',squad:'U19',cat:'Ready With Support'},
+  {id:43,name:'Dushyant Thaman',pg:'Spin Bowlers',club:'Souths',status:'identified',squad:'U19',cat:'Ready'},
+  {id:44,name:'Lakshdeep Singh',pg:'Spin Bowlers',club:'Sandgate',status:'identified',squad:'U19',cat:'Next'},
   {id:45,name:'Gurutva Singh',pg:'Spin Bowlers',club:'South Brisbane',status:'identified',squad:'U17',cat:'Developing'},
-  {id:47,name:'Alex Walduck',pg:'Wicket Keepers',club:'University',status:'identified',squad:'U19',cat:'Ready With Support'},
+  {id:47,name:'Alex Walduck',pg:'Wicket Keepers',club:'University',status:'identified',squad:'U19',cat:'Next'},
   {id:49,name:'Rhys Johnston',pg:'Wicket Keepers',club:'Cairns',status:'identified',squad:'U19',cat:'Developing'},
-  {id:50,name:'Ishaan Sandhu',pg:'Opening Batters',club:'Souths',status:'identified',squad:'U19',cat:'Ready With Support'},
-  {id:51,name:'Jaxson Davies',pg:'Opening Batters',club:'Gold Coast',status:'identified',squad:'U19',cat:'Ready With Support'},
-  {id:52,name:'Theodore Bacalakis',pg:'Middle Order Batters',club:'University',status:'identified',squad:'U19',cat:'Ready Now'},
-  {id:53,name:'Eli Brain',pg:'Middle Order Batters',club:'Norths',status:'identified',squad:'U19',cat:'Ready Now'},
-  {id:54,name:'Charlie Henderson',pg:'Wicket Keepers',club:'University',status:'identified',squad:'U19',cat:'Ready Now'},
-  {id:55,name:'Daniel Desmet',pg:'Middle Order Batters',club:'Valleys',status:'identified',squad:'U19',cat:'Ready With Support'},
+  {id:50,name:'Ishaan Sandhu',pg:'Opening Batters',club:'Souths',status:'identified',squad:'U19',cat:'Next'},
+  {id:51,name:'Jaxson Davies',pg:'Opening Batters',club:'Gold Coast',status:'identified',squad:'U19',cat:'Next'},
+  {id:52,name:'Theodore Bacalakis',pg:'Middle Order Batters',club:'University',status:'identified',squad:'U19',cat:'Ready'},
+  {id:53,name:'Eli Brain',pg:'Middle Order Batters',club:'Norths',status:'identified',squad:'U19',cat:'Ready'},
+  {id:54,name:'Charlie Henderson',pg:'Wicket Keepers',club:'University',status:'identified',squad:'U19',cat:'Ready'},
+  {id:55,name:'Daniel Desmet',pg:'Middle Order Batters',club:'Valleys',status:'identified',squad:'U19',cat:'Next'},
   {id:56,name:'Charles Hinze',pg:'Spin Bowlers',club:'Norths',status:'identified',squad:'U19',cat:'Developing'},
   {id:57,name:'Callum Pamenter',pg:'Bowling All-Rounders',club:'Wests',status:'identified',squad:'U19',cat:'Developing'},
-  {id:58,name:'Finn Vikionkorpi',pg:'Pace Bowlers',club:'Sandgate',status:'identified',squad:'U17',cat:'Ready Now'},
-  {id:59,name:'Spencer Green',pg:'Spin Bowlers',club:'Toombul',status:'identified',squad:'U19',cat:'Ready Now'},
-  {id:61,name:'Theo Tsingos',pg:'Pace Bowlers',club:'Norths',status:'identified',squad:'U19',cat:'Ready Now'},
-  {id:62,name:'Thomas Vaseo',pg:'Pace Bowlers',club:'Redlands',status:'identified',squad:'U19',cat:'Ready Now'},
+  {id:58,name:'Finn Vikionkorpi',pg:'Pace Bowlers',club:'Sandgate',status:'identified',squad:'U17',cat:'Ready'},
+  {id:59,name:'Spencer Green',pg:'Spin Bowlers',club:'Toombul',status:'identified',squad:'U19',cat:'Ready'},
+  {id:61,name:'Theo Tsingos',pg:'Pace Bowlers',club:'Norths',status:'identified',squad:'U19',cat:'Ready'},
+  {id:62,name:'Thomas Vaseo',pg:'Pace Bowlers',club:'Redlands',status:'identified',squad:'U19',cat:'Ready'},
   {id:75,name:'Mitch Doolan',pg:'Opening Batters',club:'Norths',status:'identified',squad:'2nd XI',cat:'Developing'},
   {id:76,name:'Jack Balkin',pg:'Spin Bowlers',club:'',status:'watchlist',watchProgram:'2nd XI',watchNote:'Consistent performances in 1st last 2 seasons'},
   {id:77,name:'Jayden Draper',pg:'Wicket Keepers',club:'',status:'watchlist',watchProgram:'2nd XI',watchNote:'Top performer in Youth Cricket before aging out'},
@@ -702,26 +798,27 @@ let nextId = 86;
 // Brisbane Heat — current Men's BBL squad, kept as separate records from Bulls/2nd XI
 // since these are genuinely two different, simultaneous contracts for the same person.
 let heatAthletes = [
-  {id:86,name:'Usman Khawaja',pg:'Opening Batters',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready Now'},
-  {id:87,name:'Xavier Bartlett',pg:'Pace Bowlers',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready Now'},
-  {id:88,name:'Max Bryant',pg:'Middle Order Batters',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready Now'},
-  {id:89,name:'Lachlan Hearne',pg:'Middle Order Batters',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready Now'},
-  {id:90,name:'Spencer Johnson',pg:'Pace Bowlers',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready Now'},
-  {id:91,name:'Matt Kuhnemann',pg:'Spin Bowlers',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready Now'},
-  {id:92,name:'Marnus Labuschagne',pg:'Middle Order Batters',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready Now'},
-  {id:93,name:'Nathan McSweeney',pg:'Batting All-Rounders',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready Now'},
-  {id:94,name:'Michael Neser',pg:'Bowling All-Rounders',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready Now'},
-  {id:95,name:'Oli Patterson',pg:'Pace Bowlers',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready Now'},
-  {id:96,name:'Jimmy Peirson',pg:'Wicket Keepers',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready Now'},
-  {id:97,name:'Matt Renshaw',pg:'Opening Batters',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready Now'},
-  {id:98,name:'Callum Vidler',pg:'Pace Bowlers',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready Now'},
-  {id:99,name:'Hugh Weibgen',pg:'Batting All-Rounders',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready Now'},
-  {id:100,name:'Jack Wildermuth',pg:'Batting All-Rounders',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready Now'},
-  {id:101,name:'Tom Balkin',pg:'Bowling All-Rounders',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready Now'}
+  {id:86,name:'Usman Khawaja',pg:'Opening Batters',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready'},
+  {id:87,name:'Xavier Bartlett',pg:'Pace Bowlers',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready'},
+  {id:88,name:'Max Bryant',pg:'Middle Order Batters',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready'},
+  {id:89,name:'Lachlan Hearne',pg:'Middle Order Batters',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready'},
+  {id:90,name:'Spencer Johnson',pg:'Pace Bowlers',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready'},
+  {id:91,name:'Matt Kuhnemann',pg:'Spin Bowlers',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready'},
+  {id:92,name:'Marnus Labuschagne',pg:'Middle Order Batters',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready'},
+  {id:93,name:'Nathan McSweeney',pg:'Batting All-Rounders',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready'},
+  {id:94,name:'Michael Neser',pg:'Bowling All-Rounders',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready'},
+  {id:95,name:'Oli Patterson',pg:'Pace Bowlers',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready'},
+  {id:96,name:'Jimmy Peirson',pg:'Wicket Keepers',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready'},
+  {id:97,name:'Matt Renshaw',pg:'Opening Batters',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready'},
+  {id:98,name:'Callum Vidler',pg:'Pace Bowlers',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready'},
+  {id:99,name:'Hugh Weibgen',pg:'Batting All-Rounders',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready'},
+  {id:100,name:'Jack Wildermuth',pg:'Batting All-Rounders',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready'},
+  {id:101,name:'Tom Balkin',pg:'Bowling All-Rounders',club:'',status:'identified',squad:'Brisbane Heat',cat:'Ready'}
 ];
 athletes = athletes.concat(heatAthletes);
 nextId = 102;
 let movementLog = [
+  {time:new Date(),name:'Will Sanders',field:'Readiness',from:'Long-Term (category removed)',to:'Developing'},
   {time:new Date('2026-08-26T02:24:29.651Z'),name:'Steph Muller',field:'Added to Watchlist',from:'—',to:'Opening Batters'},
   {time:new Date('2026-08-26T02:23:37.983Z'),name:'Gurinder Sandhu',field:'Added to Watchlist',from:'—',to:'Pace Bowlers'},
   {time:new Date('2026-08-26T02:23:16.679Z'),name:'Blake Nikataras',field:'Added to Watchlist',from:'—',to:'Opening Batters'},
@@ -825,7 +922,7 @@ let movementLog = [
   {time:new Date('2026-08-21T06:25:28.277Z'),name:'Tom Whitney',field:'Squad',from:'Bulls',to:'U19'},
   {time:new Date('2026-08-21T06:25:23.743Z'),name:'Callum Vidler',field:'Squad',from:'Bulls',to:'U17'},
 ];
-let roleHealth = {}; POSITION_GROUPS.forEach(g=>{ roleHealth[g]={}; SQUADS.forEach(sq=>roleHealth[g][sq]='grey'); });
+let roleHealth = {}; POSITION_GROUPS.forEach(g=>{ roleHealth[g]={}; SQUADS.forEach(sq=>roleHealth[g][sq]='grey'); roleHealth[g]['Bulls-Shield']='grey'; roleHealth[g]['Bulls-OneDay']='grey'; });
 let gateData = {"U17→U19": {"status": "monitor", "reason": "", "history": ""}, "U19→2nd XI": {"status": "monitor", "reason": "", "history": ""}, "2nd XI→Bulls": {"status": "monitor", "reason": "", "history": ""}};
 let opportunities = [];
 let nextOppId = 1;
@@ -907,17 +1004,70 @@ function openGames(sq){
 }
 
 let currentGroup = POSITION_GROUPS[0];
-let visMode = 'identified';
+
 
 /* ============ HELPERS ============ */
 function idAthletes(){ return athletes.filter(a=>a.status==='identified'); }
 function watchAthletes(){ return athletes.filter(a=>a.status==='watchlist'); }
-function catsFor(pg,sq){ return CATEGORIES.map(c=>({...c, athletes: idAthletes().filter(a=>a.pg===pg && a.squad===sq && a.cat===c.key).sort((x,y)=>{
-  const dx = x.depthOrder==null ? Infinity : x.depthOrder, dy = y.depthOrder==null ? Infinity : y.depthOrder;
-  return dx - dy;
-})})); }
+function catsFor(pg,sq){
+  return CATEGORIES.map(c=>{
+    const primary = idAthletes().filter(a=>a.pg===pg && a.squad===sq && a.cat===c.key);
+    const secondary = idAthletes().filter(a=>a.squad===sq && Array.isArray(a.secondary) && a.secondary.some(s=>s.pg===pg && s.cat===c.key))
+      .map(a=>({...a, _arSecondary:true, _secDepth: a.secondary.find(s=>s.pg===pg).depthOrder, _secHomePg: a.pg}));
+    const combined = primary.concat(secondary).sort((x,y)=>{
+      const dx = x._arSecondary ? (x._secDepth==null?Infinity:x._secDepth) : (x.depthOrder==null?Infinity:x.depthOrder);
+      const dy = y._arSecondary ? (y._secDepth==null?Infinity:y._secDepth) : (y.depthOrder==null?Infinity:y.depthOrder);
+      return dx - dy;
+    });
+    return {...c, athletes: combined};
+  });
+}
+// Bulls' One Day Cup ranking — separate position group + depth order per athlete (a.pgOneDay / a.depthOrderOneDay),
+// since a player's role and ranking often differ between Shield and One Day. Shield keeps using catsFor() above
+// with the existing a.pg / a.depthOrder fields, so no change was needed there.
+function catsForOneDay(pg){
+  return CATEGORIES.map(c=>{
+    const primary = idAthletes().filter(a=>a.squad==='Bulls' && a.pgOneDay===pg && a.catOneDay===c.key);
+    const secondary = idAthletes().filter(a=>a.squad==='Bulls' && Array.isArray(a.secondaryOneDay) && a.secondaryOneDay.some(s=>s.pg===pg && s.cat===c.key))
+      .map(a=>({...a, _arSecondary:true, _secDepth: a.secondaryOneDay.find(s=>s.pg===pg).depthOrder, _secHomePg: a.pgOneDay}));
+    const combined = primary.concat(secondary).sort((x,y)=>{
+      const dx = x._arSecondary ? (x._secDepth==null?Infinity:x._secDepth) : (x.depthOrderOneDay==null?Infinity:x.depthOrderOneDay);
+      const dy = y._arSecondary ? (y._secDepth==null?Infinity:y._secDepth) : (y.depthOrderOneDay==null?Infinity:y.depthOrderOneDay);
+      return dx - dy;
+    });
+    return {...c, athletes: combined};
+  });
+}
+const SHORT_SKILL_LABELS = { 'Opening Batters':'Opener','Middle Order Batters':'MO Bat','All-Rounders':'All-Rounder','Pace Bowlers':'Pace','Spin Bowlers':'Spin','Wicket Keepers':'WK','Leadership':'Leadership' };
+function envColHtml(label, groups, healthKey, sq){
+  const total = groups.reduce((s,c)=>s+c.athletes.length,0);
+  const status = (roleHealth[currentGroup] && roleHealth[currentGroup][healthKey]) || 'grey';
+  return `<div class="env-col"><div class="env-head"><span>${label}</span>
+      <span style="display:flex;align-items:center;gap:8px;">
+        <span class="cnt">${total}</span>
+        <span class="rt-dot" title="${healthLabel(status)} — click to change" style="background:${dotColor(status)};cursor:pointer;" onclick="toggleHealth('${currentGroup}','${healthKey}')"></span>
+      </span></div>
+    <div class="env-body">
+      ${groups.map(c=>`<div class="cat-block"><div class="cat-lab ${c.cls}">${c.key}</div>
+        ${c.athletes.length? c.athletes.map(a=>{
+          if(a._arSecondary){
+            const homeLab = SHORT_SKILL_LABELS[a._secHomePg] || a._secHomePg;
+            return `<div class="athlete-chip" onclick="editAthlete(${a.id})"><span class="nm">${a._secDepth!=null?`#${a._secDepth} `:''}${a.name} <span style="font-size:9px;color:var(--maroon);opacity:0.75;font-weight:600;">${homeLab}</span></span>${devBadge(a)}</div>`;
+          }
+          const depth = sq==='Bulls-OneDay' ? a.depthOrderOneDay : a.depthOrder;
+          return `<div class="athlete-chip" onclick="editAthlete(${a.id})"><span class="nm">${depth!=null?`#${depth} `:''}${a.name}</span>${devBadge(a)}</div>`;
+        }).join('') : `<div class="cat-empty">—</div>`}
+      </div>`).join('')}
+    </div></div>`;
+}
 function countFor(pg,cat){ return idAthletes().filter(a=>a.pg===pg && a.cat===cat).length; }
-function readyCount(pg){ return idAthletes().filter(a=>a.pg===pg && (a.cat==='Ready Now'||a.cat==='Ready With Support')).length; }
+function readyCount(pg){
+  return idAthletes().filter(a=>{
+    if(a.pg===pg && (a.cat==='Ready'||a.cat==='Next')) return true;
+    if(a.squad==='Bulls' && a.pgOneDay===pg && (a.catOneDay==='Ready'||a.catOneDay==='Next')) return true;
+    return false;
+  }).length;
+}
 function dotColor(v){ return v==='grey'?'#9A9AA4':v==='green'?'#2E7D5B':v==='amber'?'#C98A16':'#C0392B'; }
 function healthLabel(v){ return v==='grey'?'Not yet assessed':v==='green'?'Healthy':v==='amber'?'Monitor':'Exposed'; }
 function logMove(name, field, from, to){ movementLog.unshift({time:new Date(),name,field,from,to}); }
@@ -985,6 +1135,10 @@ function selectDevSeason(id, sid){ devSeasonView[id] = sid; renderPlansView(); }
 function setDevBlueprint(id, sid, key, val){
   const a = athletes.find(x=>x.id===id); if(!a) return;
   const s = getDevSeason(a, sid); if(!s) return;
+  if(s.blueprint[key] !== val){
+    const label = (BLUEPRINT_FIELDS.find(f=>f.key===key)||{}).label || key;
+    logMove(a.name, 'Individual Player Plan', label, s.blueprint[key] ? 'Updated' : 'Added');
+  }
   s.blueprint[key] = val; scheduleSave();
 }
 
@@ -1094,30 +1248,8 @@ function renderPlansView(){
     ${renderDevSection(a)}`;
 }
 
-/* ============ SCOREBOARD + HEADER ============ */
-function renderScoreboard(){
-  document.getElementById('scoreboard').innerHTML = POSITION_GROUPS.map(g=>{
-    const rn = countFor(g,'Ready Now'); const rh = roleHealth[g]['Bulls'];
-    return `<div class="rtile" onclick="showView('readiness');selectGroup('${g}')" style="cursor:pointer;"><div class="rt-name">${g}</div><div class="rt-row"><span class="rt-dot ${rh}"></span><span class="rt-count"><b>${rn}</b> ready now <span style="opacity:.6;">(Bulls)</span></span></div></div>`;
-  }).join('');
-  const total = idAthletes().length; const watching = watchAthletes().length;
-  const rn = idAthletes().filter(a=>a.cat==='Ready Now').length;
-  document.getElementById('headerCounts').innerHTML = `
-    <div class="mchip"><div class="n">${total}</div><div class="l">Identified</div></div>
-    <div class="mchip"><div class="n">${watching}</div><div class="l">Watchlist</div></div>
-    <div class="mchip"><div class="n">${rn}</div><div class="l">Ready Now</div></div>`;
-}
-
 /* ============ VISIBILITY ============ */
-function setVisMode(mode){
-  visMode = mode;
-  document.getElementById('vtIdentified').classList.toggle('active', mode==='identified');
-  document.getElementById('vtWatch').classList.toggle('active', mode==='watchlist');
-  document.getElementById('identifiedPane').style.display = mode==='identified' ? 'block':'none';
-  document.getElementById('watchlistPane').style.display = mode==='watchlist' ? 'block':'none';
-  document.getElementById('movementPanel').style.display = 'block';
-}
-function catCls(cat){ return CATEGORIES.find(c=>c.key===cat).cls; }
+function catCls(cat){ const c = CATEGORIES.find(c=>c.key===cat); return c ? c.cls : 'dv'; }
 let squadYearView = {}; // per-squad selected year — 'Current' or one of HISTORICAL[sq]'s keys
 function renderIdentified(){
   document.getElementById('identifiedPane').innerHTML = SQUADS.map(sq=>{
@@ -1135,9 +1267,9 @@ function renderIdentified(){
     } else {
       bodyHtml = `
         ${list.length? list.map(a=>`
-          <div class="id-row" onclick="editAthlete(${a.id})">
-            <span class="nm">${a.name}</span><span class="tag">${a.pg}</span><span class="club">${a.club||''}</span>
-            ${devBadge(a)}
+          <div class="id-row has-badge" onclick="editAthlete(${a.id})">
+            <span class="nm">${a.name}</span><span class="tag">${a.pg}</span>
+            <span class="club">${a.club||''} ${devBadge(a)}</span>
             <span class="cat-badge ${catCls(a.cat)}">${a.cat}</span>
           </div>`).join('') : `<div class="cat-empty">No athletes currently in this squad.</div>`}
         <div class="add-form">
@@ -1236,25 +1368,113 @@ function removeAthlete(id){
   closeModal();
   renderAll();
 }
+function depthOrderOptions(current){
+  return ['-',...Array.from({length:15},(_,i)=>i+1)].map(v=>`<option value="${v==='-'?'':v}" ${String(current||'')===String(v==='-'?'':v)?'selected':''}>${v}</option>`).join('');
+}
+let talentTouched = false;
+function toggleSection(id){
+  const body = document.getElementById(id);
+  const isHidden = body.style.display === 'none' || !body.style.display;
+  body.style.display = isHidden ? 'block' : 'none';
+  const arrow = document.getElementById('arrow-'+id);
+  if(arrow) arrow.textContent = isHidden ? '▾' : '▸';
+}
+const READINESS_TITLES = { 'U17':'Readiness - Red/White Ball', 'U19':'Readiness - Red/White Ball', '2nd XI':'Readiness - Red Ball', 'Brisbane Heat':'Readiness T20' };
+const CAT_STEP_DOWN = { 'Ready':'Next', 'Next':'Developing', 'Developing':'Developing' };
+function secondaryRowHtml(pgId, idx, pgVal, depthVal, catVal){
+  const opts = POSITION_GROUPS.map(g=>`<option ${g===pgVal?'selected':''}>${g}</option>`).join('');
+  const catOpts = CATEGORIES.map(c=>`<option ${c.key===catVal?'selected':''}>${c.key}</option>`).join('');
+  return `
+    <div class="sec-row" style="display:flex;gap:6px;align-items:center;margin-bottom:6px;">
+      <select class="sec-pg" style="flex:2;">${opts}</select>
+      <select class="sec-cat" style="flex:1.4;" title="Readiness Category for this secondary skill">${catOpts}</select>
+      <select class="sec-depth" style="flex:1;">${depthOrderOptions(depthVal)}</select>
+      <button type="button" onclick="this.closest('.sec-row').remove()" style="border:none;background:none;color:var(--red);font-size:16px;cursor:pointer;padding:0 4px;" title="Remove">×</button>
+    </div>`;
+}
+function addSecondaryRow(pgId, homeCat){
+  const defaultCat = CAT_STEP_DOWN[homeCat] || 'Next';
+  document.getElementById(pgId+'SecList').insertAdjacentHTML('beforeend', secondaryRowHtml(pgId, null, null, null, defaultCat));
+}
+function readinessBlock(sectionId, title, setFlag, pgVal, pgId, catVal, catId, depthVal, depthId, includeNotSetOption, secondaryList){
+  const pgOptions = (includeNotSetOption?'<option value="">— not set —</option>':'') + POSITION_GROUPS.map(g=>`<option ${g===pgVal?'selected':''}>${g}</option>`).join('');
+  const catOptions = (includeNotSetOption?'<option value="">— not set —</option>':'') + CATEGORIES.map(c=>`<option ${c.key===catVal?'selected':''}>${c.key}</option>`).join('');
+  const rows = (secondaryList||[]).map(s=>secondaryRowHtml(pgId, null, s.pg, s.depthOrder, s.cat || CAT_STEP_DOWN[catVal] || 'Next')).join('');
+  return `
+    <div class="collapse-h" onclick="toggleSection('${sectionId}')">
+      <span class="collapse-arrow" id="arrow-${sectionId}">▸</span>${title}
+    </div>
+    <div class="collapse-body" id="${sectionId}" style="display:none;">
+      <div class="mfield"><label>Main Skill</label><select id="${pgId}">${pgOptions}</select></div>
+      <div class="mfield"><label>Readiness Category</label><select id="${catId}">${catOptions}</select></div>
+      <div class="mfield"><label>Ranking</label><select id="${depthId}">${depthOrderOptions(depthVal)}</select></div>
+      <div class="mfield">
+        <label>Secondary Skill${(secondaryList||[]).length!==1?'s':''} <span style="font-weight:400;color:var(--ink-soft);font-size:11px;">— each has its own Readiness Category and rank, since it doesn't have to match the main skill</span></label>
+        <div id="${pgId}SecList">${rows}</div>
+        <button type="button" onclick="addSecondaryRow('${pgId}', document.getElementById('${catId}').value)" class="btn ghost" style="padding:4px 10px;font-size:12px;">+ Add Secondary Skill</button>
+      </div>
+    </div>`;
+}
 function editAthlete(id){
   const a = athletes.find(x=>x.id===id); if(!a) return;
+  talentTouched = false;
+  document.getElementById('modalBox').classList.remove('wide');
+  document.getElementById('modalSidePanel').innerHTML = '';
+  const isBulls = a.squad==='Bulls';
+  const collapseHead = (label, targetId) => `
+    <div class="collapse-h" onclick="toggleSection('${targetId}')">
+      <span class="collapse-arrow" id="arrow-${targetId}">▸</span>${label}
+    </div>`;
+
+  let readinessHtml;
+  if(isBulls){
+    readinessHtml = readinessBlock('sec-readiness','Readiness - Red Ball', true, a.pg,'editPg', a.cat,'editCat', a.depthOrder,'editDepth', false, a.secondary)
+      + readinessBlock('sec-oneday','Readiness - White Ball', !!a.pgOneDay, a.pgOneDay||a.pg,'editPgOneDay', a.catOneDay,'editCatOneDay', a.depthOrderOneDay,'editDepthOneDay', true, a.secondaryOneDay);
+  } else {
+    const title = READINESS_TITLES[a.squad] || 'Readiness';
+    readinessHtml = readinessBlock('sec-readiness', title, true, a.pg,'editPg', a.cat,'editCat', a.depthOrder,'editDepth', false, a.secondary);
+  }
+
   document.getElementById('modalContent').innerHTML = `
     <h3>${a.name}</h3>
-    <div class="mfield"><label>Position Group</label><select id="editPg">${POSITION_GROUPS.map(g=>`<option ${g===a.pg?'selected':''}>${g}</option>`).join('')}</select></div>
-    <div class="mfield"><label>Squad</label><select id="editSquad">${SQUADS.map(s=>`<option ${s===a.squad?'selected':''}>${s}</option>`).join('')}</select></div>
-    <div class="mfield"><label>Club / Region</label><input id="editClub" value="${a.club||''}"></div>
-    <div class="mfield"><label>Readiness Category</label><select id="editCat">${CATEGORIES.map(c=>`<option ${c.key===a.cat?'selected':''}>${c.key}</option>`).join('')}</select>
-      <div style="font-size:11.5px;color:var(--ink-soft);margin-top:5px;" id="editCatQ"></div></div>
-    <div class="mfield"><label>Depth Order</label><select id="editDepth">${['-',...Array.from({length:15},(_,i)=>i+1)].map(v=>`<option value="${v==='-'?'':v}" ${String(a.depthOrder||'')===String(v==='-'?'':v)?'selected':''}>${v}</option>`).join('')}</select></div>
+
+    ${collapseHead(`Profile`, 'sec-profile')}
+    <div class="collapse-body" id="sec-profile" style="display:none;">
+      <div class="mfield"><label>Squad</label><select id="editSquad">${SQUADS.map(s=>`<option ${s===a.squad?'selected':''}>${s}</option>`).join('')}</select></div>
+      <div class="mfield"><label>Club / Region</label><input id="editClub" value="${a.club||''}"></div>
+    </div>
+
+    ${readinessHtml}
+
+    ${collapseHead(`Talent Projection`, 'sec-talent')}
+    <div class="collapse-body" id="sec-talent" style="display:none;">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:4px;">
+        <span onclick="toggleTalentScalePanel()" style="font-size:11px;color:var(--maroon);text-decoration:underline;cursor:pointer;">View Rating Scale</span>
+      </div>
+      <p style="font-size:11.5px;color:var(--ink-soft);margin-bottom:10px;">Projected ceiling at the pinnacle of their career — 0-100, independent of current squad or role.</p>
+      <div class="mfield"><label>White Ball Rating</label>
+        <div class="talent-row">
+          <input type="range" min="0" max="100" id="editWhiteBall" value="${a.whiteBallScore ?? 50}" oninput="document.getElementById('whiteBallScoreOut').textContent=this.value;talentTouched=true;">
+          <div class="talent-score" id="whiteBallScoreOut">${a.whiteBallScore ?? 50}</div>
+        </div></div>
+      <div class="mfield"><label>Red Ball Rating</label>
+        <div class="talent-row">
+          <input type="range" min="0" max="100" id="editRedBall" value="${a.redBallScore ?? 50}" oninput="document.getElementById('redBallScoreOut').textContent=this.value;talentTouched=true;">
+          <div class="talent-score" id="redBallScoreOut">${a.redBallScore ?? 50}</div>
+        </div></div>
+      <div class="mfield"><label>Comments</label><textarea id="editTalentComments" rows="2" placeholder="What attributes support this projection?" oninput="talentTouched=true;">${escAttr(a.talentComments)}</textarea></div>
+    </div>
+
+    <div class="collapse-h" onclick="closeModal();openPlayerPlan(${a.id})" style="margin-top:10px;">
+      <span class="collapse-arrow">→</span>Individual Player Plan
+    </div>
+
+    <div style="margin-top:20px;">
     <button class="btn" onclick="saveAthlete(${a.id})">Save Changes</button>
     <button class="btn ghost" onclick="closeModal()">Cancel</button>
     <button class="btn ghost" onclick="openMoveToWatchlist(${a.id})">Move To Watchlist</button>
     <button class="btn ghost" style="color:var(--red);border-color:var(--red);float:right;" onclick="removeAthlete(${a.id});">Remove</button>
-    <div style="border-top:1px solid var(--line);margin-top:18px;padding-top:14px;">
-      <button class="btn ghost" style="width:100%;" onclick="closeModal();openPlayerPlan(${a.id})">📋 Open ${a.name.split(' ')[0]}'s Individual Player Plan →</button>
     </div>`;
-  const upd = ()=>{ document.getElementById('editCatQ').textContent = CATEGORY_Q[document.getElementById('editCat').value]; };
-  document.getElementById('editCat').addEventListener('change', upd); upd();
   openModal();
 }
 function openMoveToWatchlist(id){
@@ -1281,6 +1501,21 @@ function confirmMoveToWatchlist(id){
   logMove(a.name, 'Moved to Watchlist', fromDetail, `${program} Watchlist`);
   closeModal(); renderAll();
 }
+function readSecondaryRows(pgId, homePg){
+  const list = document.getElementById(pgId+'SecList');
+  if(!list) return [];
+  const seen = new Set();
+  const out = [];
+  list.querySelectorAll('.sec-row').forEach(row=>{
+    const pg = row.querySelector('.sec-pg').value;
+    const depth = row.querySelector('.sec-depth').value;
+    const cat = row.querySelector('.sec-cat').value;
+    if(!pg || pg===homePg || seen.has(pg)) return;
+    seen.add(pg);
+    out.push({pg, cat, depthOrder: depth ? Number(depth) : null});
+  });
+  return out;
+}
 function saveAthlete(id){
   const a = athletes.find(x=>x.id===id);
   const newPg=document.getElementById('editPg').value, newSq=document.getElementById('editSquad').value,
@@ -1291,22 +1526,44 @@ function saveAthlete(id){
   if(newPg!==a.pg) logMove(a.name,'Position Group',a.pg,newPg);
   a.pg=newPg; a.squad=newSq; a.club=newClub; a.cat=newCat;
   a.depthOrder = newDepth ? Number(newDepth) : null;
+  a.secondary = readSecondaryRows('editPg', newPg);
+  const oneDayPgEl = document.getElementById('editPgOneDay'), oneDayDepthEl = document.getElementById('editDepthOneDay'), oneDayCatEl = document.getElementById('editCatOneDay');
+  if(oneDayPgEl){
+    a.catOneDay = oneDayCatEl.value || null;
+    a.depthOrderOneDay = oneDayDepthEl.value ? Number(oneDayDepthEl.value) : null;
+    a.pgOneDay = oneDayPgEl.value || (a.catOneDay || a.depthOrderOneDay!=null ? a.pg : null);
+    a.secondaryOneDay = readSecondaryRows('editPgOneDay', a.pgOneDay);
+  }
+  if(a.whiteBallScore!=null || a.redBallScore!=null || talentTouched){
+    const newWhite = Number(document.getElementById('editWhiteBall').value);
+    const newRed = Number(document.getElementById('editRedBall').value);
+    if(talentTouched && (a.whiteBallScore!==newWhite || a.redBallScore!==newRed)){
+      logMove(a.name, 'Talent Projection', `WB ${a.whiteBallScore??'—'} / RB ${a.redBallScore??'—'}`, `WB ${newWhite} / RB ${newRed}`);
+    }
+    a.whiteBallScore = newWhite;
+    a.redBallScore = newRed;
+    a.talentComments = document.getElementById('editTalentComments').value;
+  }
   closeModal(); renderAll();
 }
-function toggleMovementPanel(){
-  const feed = document.getElementById('mvFeed');
-  const icon = document.getElementById('mvToggleIcon');
+function toggleMovementPanel(which){
+  const feed = document.getElementById('mvFeed-'+which);
+  const icon = document.getElementById('mvToggleIcon-'+which);
   const isHidden = feed.style.display === 'none';
   feed.style.display = isHidden ? 'block' : 'none';
   icon.textContent = isHidden ? '▾ Hide' : '▸ Show';
 }
 function renderMovementPanel(){
-  document.getElementById('mvSub').textContent = `${movementLog.length} change${movementLog.length===1?'':'s'} logged`;
-  const el = document.getElementById('mvFeed');
-  if(!movementLog.length){ el.innerHTML = `<div class="empty-state">No movement logged yet.</div>`; return; }
-  el.innerHTML = movementLog.map(m=>`
-    <div class="mv-row"><div class="mv-time">${m.time.toLocaleDateString([], {month:'short',day:'numeric'})} ${m.time.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</div>
-      <div class="mv-name">${m.name}</div><div class="mv-detail">${m.field}: <span class="from">${m.from}</span> → <span class="to">${m.to}</span></div></div>`).join('');
+  ['squads','watchlist'].forEach(which=>{
+    const sub = document.getElementById('mvSub-'+which);
+    const el = document.getElementById('mvFeed-'+which);
+    if(!sub || !el) return;
+    sub.textContent = `${movementLog.length} change${movementLog.length===1?'':'s'} logged`;
+    if(!movementLog.length){ el.innerHTML = `<div class="empty-state">No movement logged yet.</div>`; return; }
+    el.innerHTML = movementLog.map(m=>`
+      <div class="mv-row"><div class="mv-time">${m.time.toLocaleDateString([], {month:'short',day:'numeric'})} ${m.time.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</div>
+        <div class="mv-name">${m.name}</div><div class="mv-detail">${m.field}: <span class="from">${m.from}</span> → <span class="to">${m.to}</span></div></div>`).join('');
+  });
 }
 
 /* ============ READINESS ============ */
@@ -1315,21 +1572,66 @@ function renderReadiness(){
   const sel = document.getElementById('pgSelect');
   if(!sel.options.length) sel.innerHTML = POSITION_GROUPS.map(g=>`<option value="${g}">${g}</option>`).join('');
   sel.value = currentGroup;
+  document.getElementById('successorFlag').innerHTML = readyCount(currentGroup)===0 ? `<span class="rh-flag">No clear successor across the pathway</span>` : '';
 
   document.getElementById('envGrid').innerHTML = SQUADS.map(sq=>{
-    const groups = catsFor(currentGroup, sq); const total = groups.reduce((s,c)=>s+c.athletes.length,0);
-    const status = roleHealth[currentGroup][sq];
-    return `<div class="env-col"><div class="env-head"><span>${sq}</span>
-        <span style="display:flex;align-items:center;gap:8px;">
-          <span class="cnt">${total}</span>
-          <span class="rt-dot" title="${healthLabel(status)} — click to change" style="background:${dotColor(status)};cursor:pointer;" onclick="toggleHealth('${currentGroup}','${sq}')"></span>
-        </span></div>
-      <div class="env-body">
-        ${groups.map(c=>`<div class="cat-block"><div class="cat-lab ${c.cls}">${c.key}</div>
-          ${c.athletes.length? c.athletes.map(a=>`<div class="athlete-chip" onclick="editAthlete(${a.id})"><span class="nm">${a.depthOrder!=null?`#${a.depthOrder} `:''}${a.name}</span>${devBadge(a)}</div>`).join('') : `<div class="cat-empty">—</div>`}
-        </div>`).join('')}
-      </div></div>`;
+    if(sq==='Bulls'){
+      return envColHtml('Bulls · Sheffield Shield', catsFor(currentGroup,'Bulls'), 'Bulls-Shield', 'Bulls-Shield')
+           + envColHtml('Bulls · One Day Cup', catsForOneDay(currentGroup), 'Bulls-OneDay', 'Bulls-OneDay');
+    }
+    return envColHtml(sq, catsFor(currentGroup, sq), sq, sq);
   }).join('');
+}
+const TALENT_SCALE = [
+  {band:'International (80-100)', cls:'intl', rows:[
+    [100,'Outstanding International talent. Number 1 ICC ranking.'],
+    [95,'Very good International talent. High ICC ranking.'],
+    [90,'Consistent International talent.'],
+    [85,'Consistent International team member.'],
+    [80,'Ability to play International Cricket. Dominant Aus A talent.']
+  ]},
+  {band:'State (50-80)', cls:'state', rows:[
+    [75,'Outstanding State talent. Aus A talent.'],
+    [70,'Very good State talent. Aus A potential.'],
+    [65,'Consistent State talent.'],
+    [60,'Good State talent.'],
+    [55,'Consistent State team member.'],
+    [50,'Ability to play State cricket. Dominant State 2nd XI talent.']
+  ]},
+  {band:'Pathway & Premier Club (0-50)', cls:'pathway', rows:[
+    [45,'Outstanding Premier Club talent. State 2nd XI talent.'],
+    [40,'Very good Premier Club talent. State 2nd XI potential.'],
+    [35,'Consistent 1st XI Premier Club talent.'],
+    [30,'Good 1st XI Premier Club talent.'],
+    [25,'Solid 1st XI Premier talent.'],
+    [20,'Ability to play 1st XI Premier Club cricket.'],
+    [15,'Pathway Player. Pushing into High grades Premier Club.'],
+    [10,'Pathway Player. Pushing through Low grades Premier Club.'],
+    [5,'Pathway Player. Low grades Premier Club.']
+  ]}
+];
+function talentScaleTableHtml(){
+  return `<table class="talent-scale-table">
+      ${TALENT_SCALE.map(b=>`<tr class="band ${b.cls}"><td colspan="2">${b.band}</td></tr>
+        ${b.rows.map(([score,desc])=>`<tr><td style="font-weight:800;width:40px;">${score}</td><td>${desc}</td></tr>`).join('')}`).join('')}
+    </table>`;
+}
+function openTalentScale(){
+  document.getElementById('modalContent').innerHTML = `<h3>Player Talent Projection Scale</h3>${talentScaleTableHtml()}`;
+  openModal();
+}
+// Opens the scale as a side panel next to the currently-open edit form (rather than replacing it),
+// so a rating can be set with the descriptions visible at the same time. Toggles closed on a second click.
+function toggleTalentScalePanel(){
+  const box = document.getElementById('modalBox');
+  const panel = document.getElementById('modalSidePanel');
+  if(box.classList.contains('wide')){
+    box.classList.remove('wide');
+    panel.innerHTML = '';
+  } else {
+    panel.innerHTML = `<h3 style="font-size:17px;">Talent Projection Scale</h3>${talentScaleTableHtml()}`;
+    box.classList.add('wide');
+  }
 }
 function openProfile(){
   const p = PROFILES[currentGroup];
@@ -1341,17 +1643,38 @@ function openProfile(){
 }
 function toggleHealth(g, sq){ if(!g) return; roleHealth[g][sq]=cycleHealth(roleHealth[g][sq]); renderAll(); }
 
-/* ============ SUCCESSION (OUTPUT) ============ */
-function renderSuccession(){
-  document.getElementById('rhBody').innerHTML = POSITION_GROUPS.map(g=>{
-    const flag = readyCount(g)===0;
-    const cells = SQUADS.map(sq=>{
-      const st = roleHealth[g][sq];
-      return `<td><span class="rt-dot" style="background:${dotColor(st)};display:inline-block;margin-right:6px;"></span>${healthLabel(st)}</td>`;
-    }).join('');
-    return `<tr><td class="grp" style="cursor:pointer;text-decoration:underline;text-underline-offset:2px;" onclick="showView('readiness');selectGroup('${g}')">${g}</td>
-      ${cells}
-      <td>${flag?'<span class="rh-flag">No clear successor</span>':''}</td></tr>`;
+/* ============ TALENT PROJECTION ============ */
+function talentScore(a){
+  if(a.whiteBallScore==null && a.redBallScore==null) return null;
+  const vals = [a.whiteBallScore, a.redBallScore].filter(v=>v!=null);
+  return vals.reduce((s,v)=>s+v,0)/vals.length;
+}
+function renderTalent(){
+  document.getElementById('talentList').innerHTML = SQUADS.map(sq=>{
+    // Sort by Overall (the average of White Ball and Red Ball) — unrated athletes fall to the bottom.
+    const list = idAthletes().filter(a=>a.squad===sq).sort((x,y)=>{
+      const sx = talentScore(x), sy = talentScore(y);
+      if(sx==null && sy==null) return 0;
+      if(sx==null) return 1;
+      if(sy==null) return -1;
+      return sy - sx;
+    });
+    return `<div class="squad-col"><div class="squad-head"><span>${sq}</span><span class="cnt">${list.length}</span></div>
+      <div class="squad-body">
+        ${list.length ? list.map(a=>{
+          const overall = talentScore(a);
+          const fmt = n => n==null ? '—' : (Math.round(n*10)/10);
+          return `<div class="id-row talent-cols" onclick="editAthlete(${a.id})">
+            <span class="nm">${a.name}</span><span class="tag">${a.pg}</span>
+            ${overall!=null ? `
+            <div class="talent-badges">
+              <span class="talent-badge"><span class="tbl">WB</span><b>${fmt(a.whiteBallScore)}</b></span>
+              <span class="talent-badge"><span class="tbl">RB</span><b>${fmt(a.redBallScore)}</b></span>
+              <span class="talent-badge ovr"><span class="tbl">Overall</span><b>${fmt(overall)}</b></span>
+            </div>` : ``}
+          </div>`;
+        }).join('') : `<div class="cat-empty">No athletes currently in this squad.</div>`}
+      </div></div>`;
   }).join('');
 }
 
@@ -1369,14 +1692,17 @@ document.getElementById('viewProfileBtn').addEventListener('click', openProfile)
 document.getElementById('modalClose').addEventListener('click', closeModal);
 document.getElementById('modalBg').addEventListener('click', e=>{ if(e.target.id==='modalBg') closeModal(); });
 function openModal(){ document.getElementById('modalBg').classList.add('active'); }
-function closeModal(){ document.getElementById('modalBg').classList.remove('active'); }
+function closeModal(){
+  document.getElementById('modalBg').classList.remove('active');
+  document.getElementById('modalBox').classList.remove('wide');
+  document.getElementById('modalSidePanel').innerHTML = '';
+}
 
 /* ============ RENDER ALL ============ */
 function renderAllNoSave(){
-  renderScoreboard();
   renderIdentified(); renderWatchlist(); renderMovementPanel();
   renderReadiness();
-  renderSuccession();
+  renderTalent();
   renderPlansView();
 }
 function renderAll(){
