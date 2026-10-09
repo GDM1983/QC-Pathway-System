@@ -1637,13 +1637,12 @@ function editAthlete(id){
       <div class="mfield"><label>Date of Birth</label><input type="date" id="editDob" value="${a.dob||''}" onchange="document.getElementById('editAgeOut').textContent=calcAge(this.value)!=null?('Age '+calcAge(this.value)):'';">
         <span id="editAgeOut" style="font-size:11.5px;color:var(--ink-soft);margin-left:6px;">${a.dob && calcAge(a.dob)!=null ? 'Age '+calcAge(a.dob) : ''}</span>
       </div>
-      <div class="mfield">
-        <label>Also Watchlist For <span style="font-weight:400;color:var(--ink-soft);font-size:11px;">— optional: track this athlete against a different program while they stay identified in ${a.squad}</span></label>
-        <select id="editExtraWatchProgram">
-          <option value="">— Not on another watchlist —</option>
-          ${SQUADS.filter(s=>s!==a.squad).map(s=>`<option ${a.extraWatch && a.extraWatch.program===s?'selected':''}>${s}</option>`).join('')}
-        </select>
-        <textarea id="editExtraWatchNote" rows="2" placeholder="Why is this athlete being watched for that program?" style="margin-top:6px;">${escAttr(a.extraWatch ? a.extraWatch.note : '')}</textarea>
+      <div class="mfield" style="background:var(--tint);border-radius:8px;padding:10px;display:flex;justify-content:space-between;align-items:center;gap:10px;">
+        <div>
+          <label style="margin-bottom:2px;">Watchlist Status</label>
+          <div style="font-size:12.5px;color:var(--ink-soft);">${a.extraWatch ? `Also being watched for <strong style="color:var(--maroon);">${a.extraWatch.program}</strong>, while staying identified in ${a.squad}.` : `Currently only identified in ${a.squad} — not on any other program's watchlist.`}</div>
+        </div>
+        <button type="button" class="btn ghost sm" onclick="openWatchlistOptions(${a.id})" style="flex:0 0 auto;">Manage…</button>
       </div>
     </div>
 
@@ -1679,21 +1678,50 @@ function editAthlete(id){
     <div style="margin-top:20px;">
     <button class="btn" onclick="saveAthlete(${a.id})">Save Changes</button>
     <button class="btn ghost" onclick="closeModal()">Cancel</button>
-    <button class="btn ghost" onclick="openMoveToWatchlist(${a.id})">Move To Watchlist</button>
     <button class="btn ghost" style="color:var(--red);border-color:var(--red);float:right;" onclick="removeAthlete(${a.id});">Remove</button>
     </div>`;
   openModal();
 }
-function openMoveToWatchlist(id){
+// Single entry point for every watchlist decision — the old design had two separate
+// places (a Profile field AND a bottom button) that both said "watchlist" and both
+// listed squad names, which made it easy to click the wrong one. Now there's exactly
+// one door in, and it forces an explicit choice between the two very different outcomes.
+function openWatchlistOptions(id){
   const a = athletes.find(x=>x.id===id); if(!a) return;
   document.getElementById('modalContent').innerHTML = `
-    <h3>Move ${a.name} to Watchlist</h3>
-    <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:16px;">${a.name} will leave ${a.squad} immediately and appear in the Watchlist tab under the program selected below.</p>
-    <div class="mfield"><label>Watchlist Program</label><select id="moveWatchProgram">${SQUADS.map(sq=>`<option ${sq===a.squad?'selected':''}>${sq}</option>`).join('')}</select></div>
-    <div class="mfield"><label>Reason</label><textarea id="moveWatchReason" rows="2" placeholder="Why is this athlete moving to the Watchlist?"></textarea></div>
-    <button class="btn" onclick="confirmMoveToWatchlist(${id})">Confirm</button>
-    <button class="btn ghost" onclick="closeModal()">Cancel</button>`;
+    <h3>${a.name} — Watchlist Options</h3>
+    ${a.extraWatch ? `
+    <div style="font-size:12.5px;background:var(--tint);border-radius:8px;padding:10px;margin-bottom:16px;">
+      Currently also watchlisted for <strong style="color:var(--maroon);">${a.extraWatch.program}</strong>.
+      <span onclick="clearExtraWatch(${id});openWatchlistOptions(${id});" style="color:var(--red);text-decoration:underline;cursor:pointer;margin-left:6px;">Remove this</span>
+    </div>` : ''}
+
+    <div style="border:2px solid var(--green);border-radius:10px;padding:14px;margin-bottom:14px;">
+      <div style="font-weight:800;color:var(--green);margin-bottom:4px;">✓ Keep ${a.name} identified in ${a.squad} — also watch another program</div>
+      <p style="font-size:12px;color:var(--ink-soft);margin-bottom:10px;">Nothing about their squad, readiness category or ranking changes. They'll additionally show up on a second program's Watchlist tab, clearly tagged as "also identified".</p>
+      <div class="mfield"><label>Watch Program</label><select id="woProgram">${SQUADS.filter(s=>s!==a.squad).map(s=>`<option ${a.extraWatch && a.extraWatch.program===s?'selected':''}>${s}</option>`).join('')}</select></div>
+      <div class="mfield"><label>Note</label><textarea id="woNote" rows="2" placeholder="Why is this athlete being watched for that program?">${escAttr(a.extraWatch ? a.extraWatch.note : '')}</textarea></div>
+      <button class="btn" style="background:var(--green);border-color:var(--green);" onclick="saveExtraWatch(${id})">Save — Add Second Watchlist</button>
+    </div>
+
+    <div style="border:2px solid var(--red);border-radius:10px;padding:14px;">
+      <div style="font-weight:800;color:var(--red);margin-bottom:4px;">⚠ Remove ${a.name} from ${a.squad} entirely — move fully to Watchlist</div>
+      <p style="font-size:12px;color:var(--ink-soft);margin-bottom:10px;">${a.name} leaves the ${a.squad} identified squad immediately. Their squad, readiness category and ranking are all cleared.</p>
+      <div class="mfield"><label>Watchlist Program</label><select id="moveWatchProgram">${SQUADS.map(sq=>`<option ${sq===a.squad?'selected':''}>${sq}</option>`).join('')}</select></div>
+      <div class="mfield"><label>Reason</label><textarea id="moveWatchReason" rows="2" placeholder="Why is this athlete moving to the Watchlist?"></textarea></div>
+      <button class="btn ghost" style="border-color:var(--red);color:var(--red);" onclick="confirmMoveToWatchlist(${id})">Confirm — Remove From ${a.squad}</button>
+    </div>
+
+    <div style="margin-top:16px;"><button class="btn ghost" onclick="editAthlete(${id})">← Back</button></div>`;
   openModal();
+}
+function saveExtraWatch(id){
+  const a = athletes.find(x=>x.id===id); if(!a) return;
+  const program = document.getElementById('woProgram').value;
+  const note = document.getElementById('woNote').value.trim();
+  if(!a.extraWatch || a.extraWatch.program!==program) logMove(a.name,'Watchlist (secondary)', a.extraWatch?a.extraWatch.program:'—', program);
+  a.extraWatch = {program, note};
+  closeModal(); renderAll();
 }
 function confirmMoveToWatchlist(id){
   const a = athletes.find(x=>x.id===id); if(!a) return;
@@ -1735,18 +1763,8 @@ function saveAthlete(id){
   a.pg=newPg; a.squad=newSq; a.club=newClub; a.cat=newCat;
   const dobEl = document.getElementById('editDob');
   if(dobEl) a.dob = dobEl.value || null;
-  const extraWatchProgramEl = document.getElementById('editExtraWatchProgram');
-  if(extraWatchProgramEl){
-    const program = extraWatchProgramEl.value;
-    const note = document.getElementById('editExtraWatchNote').value.trim();
-    if(program){
-      if(!a.extraWatch || a.extraWatch.program!==program) logMove(a.name,'Watchlist (secondary)', a.extraWatch?a.extraWatch.program:'—', program);
-      a.extraWatch = {program, note};
-    } else {
-      if(a.extraWatch) logMove(a.name,'Watchlist (secondary)', a.extraWatch.program, 'Removed');
-      delete a.extraWatch;
-    }
-  }
+  // Watchlist status (extraWatch) is managed exclusively via openWatchlistOptions() /
+  // saveExtraWatch() — a single, explicit entry point — not touched by this form.
   a.depthOrder = newDepth ? Number(newDepth) : null;
   a.secondary = readSecondaryRows('editPg', newPg);
   const oneDayPgEl = document.getElementById('editPgOneDay'), oneDayDepthEl = document.getElementById('editDepthOneDay'), oneDayCatEl = document.getElementById('editCatOneDay');
