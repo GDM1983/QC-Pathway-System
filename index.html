@@ -483,8 +483,8 @@
 <script>
 /* ============ DATA MODEL ============ */
 const POSITION_GROUPS = ['Opening Batters','Middle Order Batters','All-Rounders','Pace Bowlers','Spin Bowlers','Wicket Keepers','Leadership'];
-const SQUADS = ['U17','U19','2nd XI','Bulls','Brisbane Heat']; // pathway order — State Squad removed, merged into Bulls; Heat sits below Bulls
-const GATES = [['U17','U19'],['U19','2nd XI'],['2nd XI','Bulls']];
+const SQUADS = ['U16','U17','U19','2nd XI','Bulls','Brisbane Heat']; // pathway order — State Squad removed, merged into Bulls; Heat sits below Bulls
+const GATES = [['U16','U17'],['U17','U19'],['U19','2nd XI'],['2nd XI','Bulls']];
 const CATEGORIES = [{key:'Ready',cls:'rn'},{key:'Next',cls:'rs'},{key:'Developing',cls:'dv'}];
 const CATEGORY_Q = {
   'Ready':'Would we confidently provide the next opportunity?',
@@ -711,7 +711,8 @@ function generateCoachExport(){
       const s = latestSeason(a);
       if(!s) return;
       body += `<h4 style="margin:14px 0 4px;">${a.name} <span style="color:var(--ink-soft);font-weight:400;font-size:12px;">(${s.year||'latest season'})</span></h4>
-        ${BLUEPRINT_FIELDS.map(f=>`<p style="margin:2px 0;"><strong>${f.label}:</strong> ${(s.blueprint[f.key]||'—').replace(/</g,'&lt;')}</p>`).join('')}`;
+        ${BLUEPRINT_FIELDS.map(f=>`<p style="margin:2px 0;"><strong>${f.label}:</strong> ${(s.blueprint[f.key]||'—').replace(/</g,'&lt;')}</p>`).join('')}
+        ${SKILL_FIELDS.map(f=>`<p style="margin:2px 0;"><strong>${f.label}:</strong> ${(s.skills[f.key]||'—').replace(/</g,'&lt;')}</p>`).join('')}`;
     });
   }
 
@@ -1033,15 +1034,21 @@ const HISTORICAL = {
     '2024/25': ['Street','Lovell','Burdon','Hearne','Bryant','Palombo','Aitken','Sinfield','Sully','Guthrie','Straker','Balkin','Campbell','McLachlan','Jeh','Floros','Grewal','Snell','Vidler','Weibgen','McGiffin','Ryan','Wildermuth']
   },
   'U19': {
-    '2023-24 (Metro)': ['Hugh Weibgen (injured)','Lachlan Aitken','Callum Vidler','Tom Campbell','Cody Reynolds','Ashton Gumm','Rex Tooley','Alexander Procopis','Zac McDermott','Angus Tolhurst','Matthew Wilkins','James Pullar','Luke Wegner','Brayden Meegama'],
-    '2024-25 (Championship)': ['Aidan Firman','Jack Balkin','Steven Hogan','Alexander Procopis','Tighe Morris','Jayden Draper','Bailey Garnham','Seth McGinty','Luke Wegner','Saxon Jeh','Charles Lachmund','Brayden Meegama','Ben Ramsbotham','Eddie Leslie'],
-    '2025/26': ['Steven Hogan','Theodore Bacalakis','Tighe Morris','Jayden Draper','Harley Malpass','Michael Neumann','Lachlan McClure','Charlie Henderson','Charlie Lachmund','Ben Gordon','Louis Morris','Eddie Leslie','Lakshdeep Singh','Thomas Town']
+    '2023-24': ['Hugh Weibgen (injured)','Lachlan Aitken','Callum Vidler','Tom Campbell','Cody Reynolds','Ashton Gumm','Rex Tooley','Alexander Procopis','Zac McDermott','Angus Tolhurst','Matthew Wilkins','James Pullar','Luke Wegner','Brayden Meegama'],
+    '2024-25': ['Aidan Firman','Jack Balkin','Steven Hogan','Alexander Procopis','Tighe Morris','Jayden Draper','Bailey Garnham','Seth McGinty','Luke Wegner','Saxon Jeh','Charles Lachmund','Brayden Meegama','Ben Ramsbotham','Eddie Leslie'],
+    '2025-26': ['Steven Hogan','Theodore Bacalakis','Tighe Morris','Jayden Draper','Harley Malpass','Michael Neumann','Lachlan McClure','Charlie Henderson','Charlie Lachmund','Ben Gordon','Louis Morris','Eddie Leslie','Lakshdeep Singh','Thomas Town']
   },
   'U17': {
     '2021/22': ['Season not held (COVID-19)'],
     '2022/23': ['B Garnham','D Skipwith','J Sonter','J Steinhardt','S McGinty','J Balkin','A Procopis','J Alexander','G Williams','T Samarawickrama','C McAllister','E Kapoor','A Sidhu'],
     '2023-24': ['Michael Neumann','Damon Bass','Steven Hogan','Zac Robinson','Jackson Steinhardt','Harley Malpass','Elijah Welsh','Will Noffke','Henry King','Ben Gordon','Charles Lachmund','Angus McLean','Lakshdeep Singh'],
     '2024-25': ['Steven Hogan','Theodore Bacalakis','Blake Armstrong','Sohaan Sharma','Hayden Hamilton','Eli Brain','Rhys Johnston','Ryan Atley','Harry Langdon','Thomas Town','Sam Gassmann','Lakshdeep Singh','Dushant Thaman','Theo Tsingos']
+  },
+  'Brisbane Heat': {
+    // No past-season rosters added yet — the Current/Season dropdown mechanism is
+    // wired up the same as every other squad; add season keys here (e.g. '2024-25':
+    // ['Player One','Player Two']) the same way the other squads above do, and they'll
+    // appear in the dropdown automatically.
   }
 };
 
@@ -1070,6 +1077,19 @@ function updateGameSlot(sq,gid,si,val){
   g.team[si]=val; scheduleSave();
 }
 function escAttr(s){ return (s||'').toString().replace(/"/g,'&quot;'); }
+function calcAge(dob){
+  if(!dob) return null;
+  const d = new Date(dob); if(isNaN(d.getTime())) return null;
+  const now = new Date();
+  let age = now.getFullYear() - d.getFullYear();
+  const m = now.getMonth() - d.getMonth();
+  if(m < 0 || (m === 0 && now.getDate() < d.getDate())) age--;
+  return age>=0 && age<80 ? age : null;
+}
+function ageTag(a){
+  const age = calcAge(a.dob);
+  return age!=null ? ` · Age ${age}` : '';
+}
 function openGames(sq){
   const games = GAMES[sq] || [];
   document.getElementById('modalContent').innerHTML = `
@@ -1181,8 +1201,16 @@ const BLUEPRINT_FIELDS = [
   {key:'focus', label:'Development Focus', prompt:'What are you actively working on right now?'},
   {key:'barrier', label:'Biggest Barrier', prompt:"What's getting in the way of your progression — beyond what you're already training?"}
 ];
+const SKILL_FIELDS = [
+  {key:'batting', label:'Batting', prompt:'Notes on batting technique, shot selection, game awareness…'},
+  {key:'bowling', label:'Bowling', prompt:'Notes on bowling technique, variations, game plans…'},
+  {key:'fielding', label:'Fielding', prompt:'Notes on fielding, catching, throwing, ground coverage…'},
+  {key:'attitude', label:'Attitude', prompt:'Notes on attitude, coachability, competitiveness, culture fit…'},
+  {key:'other', label:'Other', prompt:'Any other observations…'}
+];
 
 let devSeasonView = {}; // per-athlete id -> selected season id
+let devPlanTab = {}; // per-athlete id -> 'blueprint' or 'skills'
 
 function ensureDev(a){
   if(!a.development) a.development = {seasons:[]};
@@ -1194,6 +1222,8 @@ function ensureDev(a){
 function normalizeSeason(s){
   if(!s.blueprint) s.blueprint = {};
   BLUEPRINT_FIELDS.forEach(f=>{ if(s.blueprint[f.key]===undefined) s.blueprint[f.key] = ''; });
+  if(!s.skills) s.skills = {};
+  SKILL_FIELDS.forEach(f=>{ if(s.skills[f.key]===undefined) s.skills[f.key] = ''; });
   return s;
 }
 function latestSeason(a){
@@ -1205,9 +1235,14 @@ function blueprintFilledCount(a){
   const s = latestSeason(a);
   return s ? BLUEPRINT_FIELDS.filter(f=>s.blueprint[f.key] && s.blueprint[f.key].trim()).length : 0;
 }
+function skillNotesFilledCount(a){
+  const s = latestSeason(a);
+  return s ? SKILL_FIELDS.filter(f=>s.skills[f.key] && s.skills[f.key].trim()).length : 0;
+}
 function devBadge(a){
-  const n = blueprintFilledCount(a);
-  return n>0 ? `<span onclick="event.stopPropagation();openPlayerPlan(${a.id})" title="Open Individual Player Plan" style="cursor:pointer;font-size:10px;background:var(--tint);color:var(--maroon);border-radius:999px;padding:2px 7px;font-weight:800;flex:0 0 auto;">🎯 ${n}/${BLUEPRINT_FIELDS.length}</span>` : '';
+  const n = blueprintFilledCount(a) + skillNotesFilledCount(a);
+  const total = BLUEPRINT_FIELDS.length + SKILL_FIELDS.length;
+  return n>0 ? `<span onclick="event.stopPropagation();openPlayerPlan(${a.id})" title="Open Individual Player Plan" style="cursor:pointer;font-size:10px;background:var(--tint);color:var(--maroon);border-radius:999px;padding:2px 7px;font-weight:800;flex:0 0 auto;">🎯 ${n}/${total}</span>` : '';
 }
 function newDevSeason(year){
   return normalizeSeason({id:'s'+Math.random().toString(36).slice(2,9), year});
@@ -1217,6 +1252,13 @@ function getDevSeason(a, sid){
   return s ? normalizeSeason(s) : null;
 }
 
+// The Individual Player Plan can be edited two places: the full-page Player Plans
+// view (#plansContent) and inline inside the athlete edit modal (#modalDevSection).
+// Whichever is actually in the DOM right now gets refreshed.
+function refreshDevViews(){
+  if(document.getElementById('modalDevSection')) renderModalDevSection();
+  if(document.getElementById('plansContent')) renderPlansView();
+}
 function addDevSeason(id){
   const a = athletes.find(x=>x.id===id); if(!a) return;
   const dev = ensureDev(a);
@@ -1225,9 +1267,9 @@ function addDevSeason(id){
   const ns = newDevSeason(nextYear);
   dev.seasons.push(ns);
   devSeasonView[id] = ns.id;
-  renderPlansView(); scheduleSave();
+  refreshDevViews(); scheduleSave();
 }
-function selectDevSeason(id, sid){ devSeasonView[id] = sid; renderPlansView(); }
+function selectDevSeason(id, sid){ devSeasonView[id] = sid; refreshDevViews(); }
 function setDevBlueprint(id, sid, key, val){
   const a = athletes.find(x=>x.id===id); if(!a) return;
   const s = getDevSeason(a, sid); if(!s) return;
@@ -1236,6 +1278,22 @@ function setDevBlueprint(id, sid, key, val){
     logMove(a.name, 'Individual Player Plan', label, s.blueprint[key] ? 'Updated' : 'Added');
   }
   s.blueprint[key] = val; scheduleSave();
+}
+function setDevSkill(id, sid, key, val){
+  const a = athletes.find(x=>x.id===id); if(!a) return;
+  const s = getDevSeason(a, sid); if(!s) return;
+  if(s.skills[key] !== val){
+    const label = (SKILL_FIELDS.find(f=>f.key===key)||{}).label || key;
+    logMove(a.name, 'Individual Player Plan', label, s.skills[key] ? 'Updated' : 'Added');
+  }
+  s.skills[key] = val; scheduleSave();
+}
+function selectDevPlanTab(id, tab){ devPlanTab[id] = tab; refreshDevViews(); }
+function renderModalDevSection(){
+  const el = document.getElementById('modalDevSection');
+  if(!el || currentModalAthleteId==null) return;
+  const a = athletes.find(x=>x.id===currentModalAthleteId); if(!a) return;
+  el.innerHTML = renderDevSection(a);
 }
 
 function renderDevSection(a){
@@ -1253,6 +1311,7 @@ function renderDevSection(a){
   const seasons = dev.seasons.slice().sort((x,y)=>String(x.year).localeCompare(String(y.year)));
   const selectedId = devSeasonView[a.id] || seasons[seasons.length-1].id;
   const season = getDevSeason(a, selectedId) || normalizeSeason(seasons[seasons.length-1]);
+  const planTab = devPlanTab[a.id] || 'blueprint';
 
   return `
   <div class="dev-section">
@@ -1264,7 +1323,15 @@ function renderDevSection(a){
       <button class="dev-season-add" onclick="addDevSeason(${a.id})">+ New Season</button>
     </div>
 
-    ${BLUEPRINT_FIELDS.map(f=>`
+    <div class="dev-season-tabs" style="margin-top:-4px;">
+      <button class="dev-season-tab ${planTab==='skills'?'':'active'}" onclick="selectDevPlanTab(${a.id},'blueprint')">Blueprint</button>
+      <button class="dev-season-tab ${planTab==='skills'?'active':''}" onclick="selectDevPlanTab(${a.id},'skills')">Batting / Bowling / Fielding / Attitude / Other</button>
+    </div>
+
+    ${planTab==='skills' ? SKILL_FIELDS.map(f=>`
+      <div class="dev-sub-h">${f.label}</div>
+      <textarea class="dev-textarea" style="min-height:52px;" placeholder="${f.prompt}" onchange="setDevSkill(${a.id},'${season.id}','${f.key}',this.value)">${escAttr(season.skills[f.key])}</textarea>`).join('')
+    : BLUEPRINT_FIELDS.map(f=>`
       <div class="dev-sub-h">${f.label}</div>
       <textarea class="dev-textarea" style="min-height:52px;" placeholder="${f.prompt}" onchange="setDevBlueprint(${a.id},'${season.id}','${f.key}',this.value)">${escAttr(season.blueprint[f.key])}</textarea>`).join('')}
   </div>`;
@@ -1337,7 +1404,7 @@ function renderPlansView(){
     <div class="plan-header">
       <div>
         <div class="ph-name">${a.name}</div>
-        <div class="ph-meta">${a.pg} · ${a.squad}${a.club?' · '+a.club:''}</div>
+        <div class="ph-meta">${a.pg} · ${a.squad}${a.club?' · '+a.club:''}${ageTag(a)}</div>
       </div>
       <button class="btn gold plan-print-btn" onclick="printSinglePlan()">🖨 Print This Plan</button>
     </div>
@@ -1347,9 +1414,12 @@ function renderPlansView(){
 /* ============ VISIBILITY ============ */
 function catCls(cat){ const c = CATEGORIES.find(c=>c.key===cat); return c ? c.cls : 'dv'; }
 let squadYearView = {}; // per-squad selected year — 'Current' or one of HISTORICAL[sq]'s keys
+let squadCollapsed = {}; // per-squad collapsed state on the Identified Squads tab
+function toggleSquadCollapse(sq){ squadCollapsed[sq] = !squadCollapsed[sq]; renderIdentified(); }
 function renderIdentified(){
   document.getElementById('identifiedPane').innerHTML = SQUADS.map(sq=>{
-    const years = HISTORICAL[sq] ? Object.keys(HISTORICAL[sq]) : [];
+    const hasHistoryMechanism = !!HISTORICAL[sq];
+    const years = hasHistoryMechanism ? Object.keys(HISTORICAL[sq]) : [];
     const selectedYear = squadYearView[sq] || 'Current';
     const isHistorical = selectedYear !== 'Current';
     const list = idAthletes().filter(a=>a.squad===sq);
@@ -1365,7 +1435,7 @@ function renderIdentified(){
         ${list.length? list.map(a=>`
           <div class="id-row has-badge" onclick="editAthlete(${a.id})">
             <span class="nm">${a.name}</span><span class="tag">${a.pg}</span>
-            <span class="club">${a.club||''} ${devBadge(a)}</span>
+            <span class="club">${a.club||''}${ageTag(a)} ${devBadge(a)}</span>
             <span class="cat-badge ${catCls(a.cat)}">${a.cat}</span>
           </div>`).join('') : `<div class="cat-empty">No athletes currently in this squad.</div>`}
         <div class="add-form">
@@ -1375,15 +1445,16 @@ function renderIdentified(){
         </div>`;
     }
 
-    return `<div class="squad-col"><div class="squad-head">
-        <span>${sq}</span>
+    const collapsed = !!squadCollapsed[sq];
+    return `<div class="squad-col"><div class="squad-head" style="cursor:pointer;" onclick="toggleSquadCollapse('${sq}')">
+        <span><span style="display:inline-block;transition:transform .15s;margin-right:6px;${collapsed?'':'transform:rotate(90deg);'}">▸</span>${sq}</span>
         <span style="display:flex;align-items:center;gap:8px;">
           <span class="cnt">${isHistorical ? (HISTORICAL[sq][selectedYear]||[]).length : list.length}</span>
-          ${years.length ? `<select style="font-size:11px;border-radius:6px;border:none;padding:2px 6px;font-weight:700;" onchange="squadYearView['${sq}']=this.value;renderIdentified()">${yearOptions}</select>` : ''}
-          <span style="font-size:11px;color:var(--gold);font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px;" onclick="openGames('${sq}')">🏏 Games${GAMES[sq] && GAMES[sq].length ? ` (${GAMES[sq].length})` : ''}</span>
+          ${hasHistoryMechanism ? `<select style="font-size:11px;border-radius:6px;border:none;padding:2px 6px;font-weight:700;" onclick="event.stopPropagation();" onchange="squadYearView['${sq}']=this.value;renderIdentified()">${yearOptions}</select>` : ''}
+          <span style="font-size:11px;color:var(--gold);font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px;" onclick="event.stopPropagation();openGames('${sq}')">🏏 Games${GAMES[sq] && GAMES[sq].length ? ` (${GAMES[sq].length})` : ''}</span>
         </span>
       </div>
-      <div class="squad-body">${bodyHtml}</div></div>`;
+      <div class="squad-body" style="${collapsed?'display:none;':''}">${bodyHtml}</div></div>`;
   }).join('');
 }
 function quickAddIdentified(sq){
@@ -1394,25 +1465,42 @@ function quickAddIdentified(sq){
   logMove(name,'Added','—',`${sq} · ${pgEl.value} · Developing`);
   nameEl.value=''; renderAll();
 }
+function extraWatchAthletes(sq){
+  // athletes already identified in a different squad, but also being tracked
+  // against this one via an independent "Also Watchlist For" entry.
+  return idAthletes().filter(a=>a.extraWatch && a.extraWatch.program===sq);
+}
 function renderWatchlist(){
   const watchRow = a => `
         <div class="watch-row">
           <span class="nm">${a.name}</span>
-          <span class="tag">${a.pg}${a.club?' · '+a.club:''}</span>
+          <span class="tag">${a.pg}${a.club?' · '+a.club:''}${ageTag(a)}</span>
           <span class="note">${a.watchNote||'No note yet.'}</span>
           <span class="wc-actions">
             <button class="btn sm" onclick="promoteAthlete(${a.id})">Move to Identified Squad</button>
             <button class="btn ghost sm" onclick="removeAthlete(${a.id})">Remove</button>
           </span>
         </div>`;
+  const extraWatchRow = a => `
+        <div class="watch-row">
+          <span class="nm">${a.name}</span>
+          <span class="tag">${a.pg}${a.club?' · '+a.club:''}${ageTag(a)}</span>
+          <span class="note"><em style="color:var(--maroon);font-weight:700;">Also identified — ${a.squad}.</em> ${a.extraWatch.note||'No note yet.'}</span>
+          <span class="wc-actions">
+            <button class="btn sm" onclick="editAthlete(${a.id})">Open Profile</button>
+            <button class="btn ghost sm" onclick="clearExtraWatch(${a.id})">Remove from Watchlist</button>
+          </span>
+        </div>`;
 
   const sections = SQUADS.map(sq=>{
     const list = watchAthletes().filter(a=>a.watchProgram===sq);
+    const extra = extraWatchAthletes(sq);
+    const total = list.length + extra.length;
     return `<div class="squad-col">
-      <div class="squad-head"><span>${sq} Watchlist</span><span class="cnt">${list.length}</span></div>
+      <div class="squad-head"><span>${sq} Watchlist</span><span class="cnt">${total}</span></div>
       <div class="squad-body">
         <div class="watch-list">
-          ${list.length ? list.map(watchRow).join('') : `<div class="cat-empty" style="padding:10px 4px;">No athletes currently being monitored for ${sq}.</div>`}
+          ${total ? (list.map(watchRow).join('') + extra.map(extraWatchRow).join('')) : `<div class="cat-empty" style="padding:10px 4px;">No athletes currently being monitored for ${sq}.</div>`}
         </div>
       </div>
     </div>`;
@@ -1427,6 +1515,12 @@ function renderWatchlist(){
       <input type="text" placeholder="Why we're watching…" id="watchNote" style="flex:2;">
       <button class="btn sm" onclick="addWatch()">Add to Watchlist</button>
     </div>`;
+}
+function clearExtraWatch(id){
+  const a = athletes.find(x=>x.id===id); if(!a || !a.extraWatch) return;
+  logMove(a.name, 'Watchlist (secondary)', a.extraWatch.program, 'Removed');
+  delete a.extraWatch;
+  renderAll();
 }
 function addWatch(){
   const name = document.getElementById('watchName').value.trim(); if(!name) return;
@@ -1475,7 +1569,7 @@ function toggleSection(id){
   const arrow = document.getElementById('arrow-'+id);
   if(arrow) arrow.textContent = isHidden ? '▾' : '▸';
 }
-const READINESS_TITLES = { 'U17':'Readiness - Red/White Ball', 'U19':'Readiness - Red/White Ball', '2nd XI':'Readiness - Red Ball', 'Brisbane Heat':'Readiness T20' };
+const READINESS_TITLES = { 'U16':'Readiness - Red/White Ball', 'U17':'Readiness - Red/White Ball', 'U19':'Readiness - Red/White Ball', '2nd XI':'Readiness - Red Ball', 'Brisbane Heat':'Readiness T20' };
 const CAT_STEP_DOWN = { 'Ready':'Next', 'Next':'Developing', 'Developing':'Developing' };
 function secondaryRowHtml(pgId, idx, pgVal, depthVal, catVal){
   const opts = POSITION_GROUPS.map(g=>`<option ${g===pgVal?'selected':''}>${g}</option>`).join('');
@@ -1511,9 +1605,11 @@ function readinessBlock(sectionId, title, setFlag, pgVal, pgId, catVal, catId, d
       </div>
     </div>`;
 }
+let currentModalAthleteId = null;
 function editAthlete(id){
   const a = athletes.find(x=>x.id===id); if(!a) return;
   talentTouched = false;
+  currentModalAthleteId = id;
   document.getElementById('modalBox').classList.remove('wide');
   document.getElementById('modalSidePanel').innerHTML = '';
   const isBulls = a.squad==='Bulls';
@@ -1538,6 +1634,17 @@ function editAthlete(id){
     <div class="collapse-body" id="sec-profile" style="display:none;">
       <div class="mfield"><label>Squad</label><select id="editSquad">${SQUADS.map(s=>`<option ${s===a.squad?'selected':''}>${s}</option>`).join('')}</select></div>
       <div class="mfield"><label>Club / Region</label><input id="editClub" value="${a.club||''}"></div>
+      <div class="mfield"><label>Date of Birth</label><input type="date" id="editDob" value="${a.dob||''}" onchange="document.getElementById('editAgeOut').textContent=calcAge(this.value)!=null?('Age '+calcAge(this.value)):'';">
+        <span id="editAgeOut" style="font-size:11.5px;color:var(--ink-soft);margin-left:6px;">${a.dob && calcAge(a.dob)!=null ? 'Age '+calcAge(a.dob) : ''}</span>
+      </div>
+      <div class="mfield">
+        <label>Also Watchlist For <span style="font-weight:400;color:var(--ink-soft);font-size:11px;">— optional: track this athlete against a different program while they stay identified in ${a.squad}</span></label>
+        <select id="editExtraWatchProgram">
+          <option value="">— Not on another watchlist —</option>
+          ${SQUADS.filter(s=>s!==a.squad).map(s=>`<option ${a.extraWatch && a.extraWatch.program===s?'selected':''}>${s}</option>`).join('')}
+        </select>
+        <textarea id="editExtraWatchNote" rows="2" placeholder="Why is this athlete being watched for that program?" style="margin-top:6px;">${escAttr(a.extraWatch ? a.extraWatch.note : '')}</textarea>
+      </div>
     </div>
 
     ${readinessHtml}
@@ -1561,8 +1668,12 @@ function editAthlete(id){
       <div class="mfield"><label>Comments</label><textarea id="editTalentComments" rows="2" placeholder="What attributes support this projection?" oninput="talentTouched=true;">${escAttr(a.talentComments)}</textarea></div>
     </div>
 
-    <div class="collapse-h" onclick="closeModal();openPlayerPlan(${a.id})" style="margin-top:10px;">
-      <span class="collapse-arrow">→</span>Individual Player Plan
+    ${collapseHead(`Individual Player Plan`, 'sec-ipp')}
+    <div class="collapse-body" id="sec-ipp" style="display:none;">
+      <div id="modalDevSection">${renderDevSection(a)}</div>
+      <div style="margin-top:10px;text-align:right;">
+        <span onclick="closeModal();openPlayerPlan(${a.id})" style="font-size:11.5px;color:var(--maroon);text-decoration:underline;cursor:pointer;">Open as full page (for printing) →</span>
+      </div>
     </div>
 
     <div style="margin-top:20px;">
@@ -1594,6 +1705,7 @@ function confirmMoveToWatchlist(id){
   a.watchNote = reason;
   delete a.squad;
   delete a.cat;
+  delete a.extraWatch;
   logMove(a.name, 'Moved to Watchlist', fromDetail, `${program} Watchlist`);
   closeModal(); renderAll();
 }
@@ -1621,6 +1733,20 @@ function saveAthlete(id){
   if(newCat!==a.cat) logMove(a.name,'Readiness',a.cat,newCat);
   if(newPg!==a.pg) logMove(a.name,'Position Group',a.pg,newPg);
   a.pg=newPg; a.squad=newSq; a.club=newClub; a.cat=newCat;
+  const dobEl = document.getElementById('editDob');
+  if(dobEl) a.dob = dobEl.value || null;
+  const extraWatchProgramEl = document.getElementById('editExtraWatchProgram');
+  if(extraWatchProgramEl){
+    const program = extraWatchProgramEl.value;
+    const note = document.getElementById('editExtraWatchNote').value.trim();
+    if(program){
+      if(!a.extraWatch || a.extraWatch.program!==program) logMove(a.name,'Watchlist (secondary)', a.extraWatch?a.extraWatch.program:'—', program);
+      a.extraWatch = {program, note};
+    } else {
+      if(a.extraWatch) logMove(a.name,'Watchlist (secondary)', a.extraWatch.program, 'Removed');
+      delete a.extraWatch;
+    }
+  }
   a.depthOrder = newDepth ? Number(newDepth) : null;
   a.secondary = readSecondaryRows('editPg', newPg);
   const oneDayPgEl = document.getElementById('editPgOneDay'), oneDayDepthEl = document.getElementById('editDepthOneDay'), oneDayCatEl = document.getElementById('editCatOneDay');
@@ -1792,6 +1918,8 @@ function closeModal(){
   document.getElementById('modalBg').classList.remove('active');
   document.getElementById('modalBox').classList.remove('wide');
   document.getElementById('modalSidePanel').innerHTML = '';
+  document.getElementById('modalContent').innerHTML = '';
+  currentModalAthleteId = null;
 }
 
 /* ============ RENDER ALL ============ */
