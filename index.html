@@ -561,6 +561,19 @@ function migrateState(){
     ['Bulls-Shield','Bulls-OneDay'].forEach(k=>{ if(!roleHealth[g][k]) roleHealth[g][k] = 'grey'; });
   });
   SQUADS.forEach(sq=>{ if(!GAMES[sq]) GAMES[sq] = []; });
+  // Backfill for games saved before the PlayHQ scorecard link field existed, and
+  // before U16 games supported a second 12-player team list.
+  SQUADS.forEach(sq=>{
+    GAMES[sq].forEach(g=>{
+      if(g.scorecardUrl===undefined) g.scorecardUrl = '';
+      if(!Array.isArray(g.team)) g.team = blankTeam();
+      if(squadUsesTwoTeams(sq) && !Array.isArray(g.team2)) g.team2 = blankTeam();
+      if(squadUsesTwoTeams(sq)){
+        if(!g.teamName) g.teamName = 'Team 1';
+        if(!g.team2Name) g.team2Name = 'Team 2';
+      }
+    });
+  });
   athletes.forEach(a=>{
     ensureDev(a);
     if(a.cat && LEGACY_CATEGORY_MAP[a.cat]) a.cat = LEGACY_CATEGORY_MAP[a.cat];
@@ -1057,8 +1070,14 @@ const HISTORICAL = {
 let GAMES = {}; SQUADS.forEach(sq=>GAMES[sq]=[]);
 let nextGameId = 1;
 function blankTeam(){ return Array(12).fill(''); }
+// U16 runs the State Championships carnival, where Queensland often fields two
+// separate 12-player teams for the one game/fixture, so U16 games get a second
+// team list. Every other squad keeps a single team list.
+function squadUsesTwoTeams(sq){ return sq==='U16'; }
+function safeUrl(u){ u=(u||'').trim(); if(!u) return ''; if(!/^https?:\/\//i.test(u)) u='https://'+u; return /^https?:\/\/[^\s"<>]+$/i.test(u) ? u : ''; }
 function addGame(sq){
-  GAMES[sq].push({id:nextGameId++, competition:'', label:`Game ${GAMES[sq].length+1}`, opponent:'', team:blankTeam()});
+  const twoTeams = squadUsesTwoTeams(sq);
+  GAMES[sq].push({id:nextGameId++, competition:'', label:`Game ${GAMES[sq].length+1}`, opponent:'', scorecardUrl:'', team:blankTeam(), teamName: twoTeams ? 'Team 1' : '', team2: twoTeams ? blankTeam() : null, team2Name: twoTeams ? 'Team 2' : ''});
   openGames(sq);
   scheduleSave();
 }
@@ -1072,9 +1091,16 @@ function updateGameField(sq,gid,field,val){
   const g = GAMES[sq].find(x=>x.id===gid); if(!g) return;
   g[field]=val; scheduleSave();
 }
-function updateGameSlot(sq,gid,si,val){
+function updateGameSlot(sq,gid,si,val,teamKey){
   const g = GAMES[sq].find(x=>x.id===gid); if(!g) return;
-  g.team[si]=val; scheduleSave();
+  const key = teamKey || 'team';
+  if(!g[key]) g[key] = blankTeam();
+  g[key][si]=val; scheduleSave();
+}
+function openScorecardLink(sq,gid){
+  const g = GAMES[sq].find(x=>x.id===gid); if(!g) return;
+  const u = safeUrl(g.scorecardUrl);
+  if(u) window.open(u,'_blank','noopener');
 }
 function escAttr(s){ return (s||'').toString().replace(/"/g,'&quot;'); }
 function calcAge(dob){
@@ -1090,11 +1116,26 @@ function ageTag(a){
   const age = calcAge(a.dob);
   return age!=null ? ` · Age ${age}` : '';
 }
+function teamListHtml(sq, g, teamKey, nameKey){
+  const team = g[teamKey] || blankTeam();
+  return `
+    ${nameKey ? `<input type="text" value="${escAttr(g[nameKey])}" placeholder="Team name…" style="margin:10px 0 6px;display:block;width:100%;max-width:260px;border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-size:11px;font-weight:800;color:var(--rust);text-transform:uppercase;letter-spacing:.3px;"
+        onchange="updateGameField('${sq}',${g.id},'${nameKey}',this.value)">` : ''}
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;">
+      ${team.map((n,si)=>`
+        <div style="display:flex;align-items:center;gap:5px;">
+          <b style="font-size:11px;color:var(--rust);width:16px;flex:0 0 auto;">${si+1}</b>
+          <input type="text" value="${escAttr(n)}" placeholder="Name" style="flex:1;min-width:0;border:1px solid var(--line);border-radius:6px;padding:4px 6px;font-size:12px;"
+            onchange="updateGameSlot('${sq}',${g.id},${si},this.value,'${teamKey}')">
+        </div>`).join('')}
+    </div>`;
+}
 function openGames(sq){
   const games = GAMES[sq] || [];
+  const twoTeams = squadUsesTwoTeams(sq);
   document.getElementById('modalContent').innerHTML = `
     <h3>${sq} — Team Sheets</h3>
-    <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:14px;">Add a game each time a team is named. Saves automatically. Not linked to Readiness or squad membership.</p>
+    <p style="font-size:12.5px;color:var(--ink-soft);margin-bottom:14px;">Add a game each time a team is named. Saves automatically. Not linked to Readiness or squad membership.${twoTeams ? ' U16 games support two separate 12-player teams, for the State Championships carnival.' : ''}</p>
     <button class="btn sm" onclick="addGame('${sq}')" style="margin-bottom:14px;">+ Add Game</button>
     ${games.length ? games.map(g=>`
       <div style="border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px;">
@@ -1107,14 +1148,13 @@ function openGames(sq){
             onchange="updateGameField('${sq}',${g.id},'opponent',this.value)">
           <button class="btn ghost sm" style="color:var(--red);border-color:var(--red);" onclick="removeGame('${sq}',${g.id})">Remove</button>
         </div>
-        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;">
-          ${g.team.map((n,si)=>`
-            <div style="display:flex;align-items:center;gap:5px;">
-              <b style="font-size:11px;color:var(--rust);width:16px;flex:0 0 auto;">${si+1}</b>
-              <input type="text" value="${escAttr(n)}" placeholder="Name" style="flex:1;min-width:0;border:1px solid var(--line);border-radius:6px;padding:4px 6px;font-size:12px;"
-                onchange="updateGameSlot('${sq}',${g.id},${si},this.value)">
-            </div>`).join('')}
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px;">
+          <label style="font-size:11px;font-weight:700;color:var(--ink-soft);flex:0 0 auto;">PlayHQ Scorecard</label>
+          <input type="url" value="${escAttr(g.scorecardUrl)}" placeholder="https://www.playhq.com/…" style="flex:1;min-width:0;border:1px solid var(--line);border-radius:6px;padding:5px 8px;font-size:12px;"
+            onchange="updateGameField('${sq}',${g.id},'scorecardUrl',this.value)">
+          <button class="btn ghost sm" style="flex:0 0 auto;" onclick="openScorecardLink('${sq}',${g.id})">Open</button>
         </div>
+        ${twoTeams ? teamListHtml(sq,g,'team','teamName') + teamListHtml(sq,g,'team2','team2Name') : teamListHtml(sq,g,'team','')}
       </div>`).join('') : `<div class="cat-empty">No games added yet — click "+ Add Game" to start.</div>`}`;
   openModal();
 }
