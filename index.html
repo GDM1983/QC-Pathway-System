@@ -110,23 +110,26 @@
     display:flex;justify-content:space-between;align-items:center;}
   .squad-head .cnt{background:var(--gold);color:var(--navy);border-radius:999px;padding:1px 9px;font-size:11px;font-weight:800;}
   .squad-body{padding:10px 14px;}
-  .id-row{display:grid;grid-template-columns:minmax(120px,180px) minmax(110px,175px) 1fr;align-items:center;column-gap:18px;padding:10px 8px;border-bottom:1px solid var(--line);font-size:14px;cursor:pointer;}
-  .id-row.has-badge{grid-template-columns:minmax(120px,180px) minmax(110px,175px) 1fr minmax(100px,140px);}
+  .id-row{display:grid;grid-template-columns:minmax(120px,180px) minmax(110px,175px) 1fr;align-items:center;column-gap:26px;padding:10px 10px;border-bottom:1px solid var(--line);font-size:14px;cursor:pointer;}
+  .id-row.has-badge{grid-template-columns:minmax(110px,170px) minmax(100px,165px) minmax(90px,1fr) minmax(56px,70px) minmax(90px,120px);}
   .id-row.talent-cols{grid-template-columns:minmax(120px,180px) minmax(110px,175px) 1fr;}
   .id-row:last-child{border-bottom:none;}
   .id-row:hover{background:var(--tint);}
-  .id-row .nm{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .id-row .nm{font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;justify-self:start;}
   .id-row .tag{background:var(--tint);color:var(--maroon);border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:700;justify-self:start;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .id-row .club{color:var(--ink-soft);font-size:12.5px;}
+  .id-row .club{color:var(--ink-soft);font-size:12.5px;justify-self:start;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .id-row .age{color:var(--ink-soft);font-size:12px;justify-self:start;white-space:nowrap;}
   .cat-badge{font-size:11px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;border-radius:999px;padding:4px 10px;justify-self:start;}
   .cat-badge.rn{background:var(--green-bg);color:var(--green);} .cat-badge.rs{background:var(--amber-bg);color:var(--amber);}
   .cat-badge.dv{background:var(--blue-bg);color:var(--blue);}
 
   .watch-list{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fdfdfc;}
-  .watch-row{display:flex;align-items:center;gap:12px;padding:11px 14px;border-bottom:1px dashed var(--line);font-size:14px;flex-wrap:wrap;}
+  .watch-row{display:flex;align-items:center;gap:18px;padding:11px 16px;border-bottom:1px dashed var(--line);font-size:14px;flex-wrap:wrap;}
   .watch-row:last-child{border-bottom:none;}
   .watch-row .nm{font-weight:700;flex:0 0 auto;min-width:130px;}
   .watch-row .tag{background:var(--tint);color:var(--maroon);border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:700;flex:0 0 auto;}
+  .watch-row .club{color:var(--ink-soft);font-size:12.5px;flex:0 0 auto;}
+  .watch-row .age{color:var(--ink-soft);font-size:12px;flex:0 0 auto;}
   .watch-row .note{color:var(--ink-soft);font-style:italic;font-size:13px;flex:1;min-width:160px;}
   .watch-row .wc-actions{display:flex;gap:6px;flex:0 0 auto;}
 
@@ -536,7 +539,7 @@ function showConflictToast(){
   conflictToastTimer = setTimeout(()=>{ el.style.display = 'none'; }, 7000);
 }
 function collectState(){
-  return { athletes, nextId, movementLog, roleHealth, gateData, opportunities, nextOppId, squadYearView, GAMES, _rev: stateRev };
+  return { athletes, nextId, movementLog, roleHealth, gateData, opportunities, nextOppId, squadYearView, GAMES, HISTORICAL, _rev: stateRev };
 }
 function applyState(s){
   if(!s) return;
@@ -549,6 +552,10 @@ function applyState(s){
   if(s.nextOppId) nextOppId = s.nextOppId;
   if(s.squadYearView) squadYearView = s.squadYearView;
   if(s.GAMES) GAMES = s.GAMES;
+  // HISTORICAL seasons are seeded as a const, but are now editable (add season / add,
+  // rename, remove players), so any saved copy — including user-added seasons/players —
+  // takes precedence over the built-in seed data once one exists.
+  if(s.HISTORICAL) HISTORICAL = s.HISTORICAL;
   stateRev = s._rev || 0;
   migrateState();
 }
@@ -561,6 +568,7 @@ function migrateState(){
     ['Bulls-Shield','Bulls-OneDay'].forEach(k=>{ if(!roleHealth[g][k]) roleHealth[g][k] = 'grey'; });
   });
   SQUADS.forEach(sq=>{ if(!GAMES[sq]) GAMES[sq] = []; });
+  SQUADS.forEach(sq=>{ if(!HISTORICAL[sq]) HISTORICAL[sq] = {}; });
   // Backfill for games saved before the PlayHQ scorecard link field existed, and
   // before U16 games supported a second 12-player team list.
   SQUADS.forEach(sq=>{
@@ -1037,7 +1045,7 @@ let gateData = {"U17→U19": {"status": "monitor", "reason": "", "history": ""},
 let opportunities = [];
 let nextOppId = 1;
 // Historical squads — real past rosters from the depth chart workbook, browsed via the Historical toggle
-const HISTORICAL = {
+let HISTORICAL = {
   'Bulls': {
     '2023-24': ['Usman Khawaja','Marnus Labuschagne','Michael Neser','Matthew Renshaw','Jimmy Peirson','Bryce Street','Jack Clayton','Max Bryant','Joe Burns','Ben McDermott','Aryan Jain','James Bazley','Jack Wildermuth','Xavier Bartlett','Will Prestwidge','Mark Steketee','Gurinder Sandhu','Matthew Kuhnemann','Mitchell Swepson','Liam Guthrie','Connor Sully'],
     '2024-25': ['Marnus Labuschagne','Xavier Bartlett','Usman Khawaja','Michael Neser','Mitchell Swepson','Matthew Renshaw','Mark Steketee','Jimmy Peirson','Ben McDermott','Jack Clayton','Jack Wildermuth','Bryce Street','Angus Lovell','Gurinder Sandhu','Max Bryant','Hugo Burdon','Hugh Weibgen','Callum Vidler','Lachlan Hearne','Liam Guthrie','Jackson Sinfield']
@@ -1059,10 +1067,10 @@ const HISTORICAL = {
   },
   'Brisbane Heat': {
     // No past-season rosters added yet — the Current/Season dropdown mechanism is
-    // wired up the same as every other squad; add season keys here (e.g. '2024-25':
-    // ['Player One','Player Two']) the same way the other squads above do, and they'll
-    // appear in the dropdown automatically.
-  }
+    // wired up the same as every other squad; seasons can be added directly from the
+    // "+ Add Season" control next to the dropdown, or by adding a key here by hand.
+  },
+  'U16': {}
 };
 
 // Season team sheets — genuinely dynamic. No fixed game count per program;
@@ -1468,14 +1476,24 @@ function renderIdentified(){
     let bodyHtml;
     if(isHistorical){
       const names = (HISTORICAL[sq] && HISTORICAL[sq][selectedYear]) || [];
-      bodyHtml = `<div class="hist-note" style="margin-top:8px;">Past squad — reference only, not editable.</div>
-        <div class="hist-list">${names.map(n=>`<div class="hist-row">${n}</div>`).join('')}</div>`;
+      bodyHtml = `<div class="hist-note" style="margin-top:8px;">Past season roster — add, rename or remove players as needed.</div>
+        <div class="hist-list">${names.length ? names.map((n,ni)=>`
+          <div class="hist-row" style="display:flex;align-items:center;gap:8px;">
+            <input type="text" value="${escAttr(n)}" style="flex:1;border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:13px;"
+              onchange="renameHistoricalPlayer('${sq}','${selectedYear}',${ni},this.value)">
+            <button class="btn ghost sm" style="color:var(--red);border-color:var(--red);" onclick="removeHistoricalPlayer('${sq}','${selectedYear}',${ni})">Remove</button>
+          </div>`).join('') : `<div class="cat-empty">No players added to this season yet.</div>`}</div>
+        <div class="add-form">
+          <input type="text" placeholder="Add player name…" id="histAdd-${sq.replace(/\s/g,'')}">
+          <button class="btn sm" onclick="addHistoricalPlayer('${sq}','${selectedYear}')">Add</button>
+        </div>`;
     } else {
       bodyHtml = `
         ${list.length? list.map(a=>`
           <div class="id-row has-badge" onclick="editAthlete(${a.id})">
             <span class="nm">${a.name}</span><span class="tag">${a.pg}</span>
-            <span class="club">${a.club||''}${ageTag(a)} ${devBadge(a)}</span>
+            <span class="club">${a.club||'—'}</span>
+            <span class="age">${calcAge(a.dob)!=null ? 'Age '+calcAge(a.dob) : ''}</span>
             <span class="cat-badge ${catCls(a.cat)}">${a.cat}</span>
           </div>`).join('') : `<div class="cat-empty">No athletes currently in this squad.</div>`}
         <div class="add-form">
@@ -1490,7 +1508,8 @@ function renderIdentified(){
         <span><span style="display:inline-block;transition:transform .15s;margin-right:6px;${collapsed?'':'transform:rotate(90deg);'}">▸</span>${sq}</span>
         <span style="display:flex;align-items:center;gap:8px;">
           <span class="cnt">${isHistorical ? (HISTORICAL[sq][selectedYear]||[]).length : list.length}</span>
-          ${hasHistoryMechanism ? `<select style="font-size:11px;border-radius:6px;border:none;padding:2px 6px;font-weight:700;" onclick="event.stopPropagation();" onchange="squadYearView['${sq}']=this.value;renderIdentified()">${yearOptions}</select>` : ''}
+          ${hasHistoryMechanism ? `<select style="font-size:11px;border-radius:6px;border:none;padding:2px 6px;font-weight:700;" onclick="event.stopPropagation();" onchange="squadYearView['${sq}']=this.value;renderIdentified()">${yearOptions}</select>
+          <span title="Add a new season" style="font-size:13px;color:var(--gold);font-weight:800;cursor:pointer;line-height:1;" onclick="event.stopPropagation();addSquadSeason('${sq}')">+</span>` : ''}
           <span style="font-size:11px;color:var(--gold);font-weight:700;cursor:pointer;text-decoration:underline;text-underline-offset:2px;" onclick="event.stopPropagation();openGames('${sq}')">🏏 Games${GAMES[sq] && GAMES[sq].length ? ` (${GAMES[sq].length})` : ''}</span>
         </span>
       </div>
@@ -1505,6 +1524,35 @@ function quickAddIdentified(sq){
   logMove(name,'Added','—',`${sq} · ${pgEl.value} · Developing`);
   nameEl.value=''; renderAll();
 }
+function addSquadSeason(sq){
+  if(!HISTORICAL[sq]) HISTORICAL[sq] = {};
+  const year = (prompt(`Add a season for ${sq} (e.g. "2026-27"):`, '') || '').trim();
+  if(!year) return;
+  if(HISTORICAL[sq][year]){ alert(`${sq} already has a "${year}" season.`); squadYearView[sq] = year; renderAll(); return; }
+  HISTORICAL[sq][year] = [];
+  squadYearView[sq] = year;
+  renderAll();
+}
+function addHistoricalPlayer(sq, year){
+  const key = sq.replace(/\s/g,'');
+  const el = document.getElementById('histAdd-'+key);
+  const name = (el.value||'').trim(); if(!name) return;
+  if(!HISTORICAL[sq]) HISTORICAL[sq] = {};
+  if(!HISTORICAL[sq][year]) HISTORICAL[sq][year] = [];
+  HISTORICAL[sq][year].push(name);
+  el.value = '';
+  renderAll();
+}
+function renameHistoricalPlayer(sq, year, idx, val){
+  if(!HISTORICAL[sq] || !HISTORICAL[sq][year]) return;
+  HISTORICAL[sq][year][idx] = val;
+  scheduleSave();
+}
+function removeHistoricalPlayer(sq, year, idx){
+  if(!HISTORICAL[sq] || !HISTORICAL[sq][year]) return;
+  HISTORICAL[sq][year].splice(idx,1);
+  renderAll();
+}
 function extraWatchAthletes(sq){
   // athletes already identified in a different squad, but also being tracked
   // against this one via an independent "Also Watchlist For" entry.
@@ -1514,7 +1562,9 @@ function renderWatchlist(){
   const watchRow = a => `
         <div class="watch-row">
           <span class="nm">${a.name}</span>
-          <span class="tag">${a.pg}${a.club?' · '+a.club:''}${ageTag(a)}</span>
+          <span class="tag">${a.pg}</span>
+          <span class="club">${a.club||''}</span>
+          <span class="age">${calcAge(a.dob)!=null ? 'Age '+calcAge(a.dob) : ''}</span>
           <span class="note">${a.watchNote||'No note yet.'}</span>
           <span class="wc-actions">
             <button class="btn sm" onclick="promoteAthlete(${a.id})">Move to Identified Squad</button>
@@ -1524,7 +1574,9 @@ function renderWatchlist(){
   const extraWatchRow = a => `
         <div class="watch-row">
           <span class="nm">${a.name}</span>
-          <span class="tag">${a.pg}${a.club?' · '+a.club:''}${ageTag(a)}</span>
+          <span class="tag">${a.pg}</span>
+          <span class="club">${a.club||''}</span>
+          <span class="age">${calcAge(a.dob)!=null ? 'Age '+calcAge(a.dob) : ''}</span>
           <span class="note"><em style="color:var(--maroon);font-weight:700;">Also identified — ${a.squad}.</em> ${a.extraWatch.note||'No note yet.'}</span>
           <span class="wc-actions">
             <button class="btn sm" onclick="editAthlete(${a.id})">Open Profile</button>
