@@ -124,7 +124,8 @@
   .cat-badge.dv{background:var(--blue-bg);color:var(--blue);}
 
   .watch-list{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fdfdfc;}
-  .watch-row{display:flex;align-items:center;gap:18px;padding:11px 16px;border-bottom:1px dashed var(--line);font-size:14px;flex-wrap:wrap;}
+  .watch-row{display:flex;align-items:center;gap:18px;padding:11px 16px;border-bottom:1px dashed var(--line);font-size:14px;flex-wrap:wrap;cursor:pointer;}
+  .watch-row:hover{background:var(--tint);}
   .watch-row:last-child{border-bottom:none;}
   .watch-row .nm{font-weight:700;flex:0 0 auto;min-width:130px;}
   .watch-row .tag{background:var(--tint);color:var(--maroon);border-radius:999px;padding:3px 10px;font-size:11.5px;font-weight:700;flex:0 0 auto;}
@@ -1560,15 +1561,15 @@ function extraWatchAthletes(sq){
 }
 function renderWatchlist(){
   const watchRow = a => `
-        <div class="watch-row">
+        <div class="watch-row" onclick="editWatchlistAthlete(${a.id})">
           <span class="nm">${a.name}</span>
           <span class="tag">${a.pg}</span>
           <span class="club">${a.club||''}</span>
           <span class="age">${calcAge(a.dob)!=null ? 'Age '+calcAge(a.dob) : ''}</span>
           <span class="note">${a.watchNote||'No note yet.'}</span>
           <span class="wc-actions">
-            <button class="btn sm" onclick="promoteAthlete(${a.id})">Move to Identified Squad</button>
-            <button class="btn ghost sm" onclick="removeAthlete(${a.id})">Remove</button>
+            <button class="btn sm" onclick="event.stopPropagation();promoteAthlete(${a.id})">Move to Identified Squad</button>
+            <button class="btn ghost sm" onclick="event.stopPropagation();removeAthlete(${a.id})">Remove</button>
           </span>
         </div>`;
   const extraWatchRow = a => `
@@ -1623,6 +1624,45 @@ function addWatch(){
   logMove(name,'Added to Watchlist','—',`${program} · ${pg}`);
   document.getElementById('watchName').value=''; document.getElementById('watchNote').value='';
   renderAll();
+}
+function editWatchlistAthlete(id){
+  const a = athletes.find(x=>x.id===id); if(!a) return;
+  document.getElementById('modalBox').classList.remove('wide');
+  document.getElementById('modalSidePanel').innerHTML = '';
+  document.getElementById('modalContent').innerHTML = `
+    <h3>Edit Watchlist Athlete</h3>
+    <div class="mfield"><label>Name</label><input id="wEditName" value="${escAttr(a.name)}"></div>
+    <div class="mfield"><label>Position Group</label><select id="wEditPg">${POSITION_GROUPS.map(g=>`<option ${g===a.pg?'selected':''}>${g}</option>`).join('')}</select></div>
+    <div class="mfield"><label>Club / Region</label><input id="wEditClub" value="${a.club||''}"></div>
+    <div class="mfield"><label>Date of Birth</label><input type="date" id="wEditDob" value="${a.dob||''}" onchange="document.getElementById('wEditAgeOut').textContent=calcAge(this.value)!=null?('Age '+calcAge(this.value)):'';">
+      <span id="wEditAgeOut" style="font-size:11.5px;color:var(--ink-soft);margin-left:6px;">${a.dob && calcAge(a.dob)!=null ? 'Age '+calcAge(a.dob) : ''}</span>
+    </div>
+    <div class="mfield"><label>Watch Program</label><select id="wEditProgram">${SQUADS.map(sq=>`<option ${sq===a.watchProgram?'selected':''}>${sq}</option>`).join('')}</select></div>
+    <div class="mfield"><label>Note</label><textarea id="wEditNote" rows="2" placeholder="Why we're watching…">${escAttr(a.watchNote)}</textarea></div>
+    <div style="margin-top:20px;">
+    <button class="btn" onclick="saveWatchlistAthlete(${a.id})">Save Changes</button>
+    <button class="btn ghost" onclick="closeModal()">Cancel</button>
+    <button class="btn ghost" style="color:var(--red);border-color:var(--red);float:right;" onclick="removeAthlete(${a.id});">Remove</button>
+    </div>`;
+  openModal();
+}
+function saveWatchlistAthlete(id){
+  const a = athletes.find(x=>x.id===id); if(!a) return;
+  const newName = document.getElementById('wEditName').value.trim() || a.name;
+  const newPg = document.getElementById('wEditPg').value;
+  const newClub = document.getElementById('wEditClub').value;
+  const newProgram = document.getElementById('wEditProgram').value;
+  const newNote = document.getElementById('wEditNote').value.trim();
+  const dobEl = document.getElementById('wEditDob');
+  if(newName!==a.name) logMove(a.name,'Name',a.name,newName);
+  if(newProgram!==a.watchProgram) logMove(newName,'Watch Program',a.watchProgram,newProgram);
+  a.name = newName;
+  a.pg = newPg;
+  a.club = newClub;
+  a.watchProgram = newProgram;
+  a.watchNote = newNote;
+  if(dobEl) a.dob = dobEl.value || null;
+  closeModal(); renderAll();
 }
 function promoteAthlete(id){
   const a = athletes.find(x=>x.id===id); if(!a) return;
@@ -1724,6 +1764,7 @@ function editAthlete(id){
 
     ${collapseHead(`Profile`, 'sec-profile')}
     <div class="collapse-body" id="sec-profile" style="display:none;">
+      <div class="mfield"><label>Name</label><input id="editName" value="${escAttr(a.name)}"></div>
       <div class="mfield"><label>Squad</label><select id="editSquad">${SQUADS.map(s=>`<option ${s===a.squad?'selected':''}>${s}</option>`).join('')}</select></div>
       <div class="mfield"><label>Club / Region</label><input id="editClub" value="${a.club||''}"></div>
       <div class="mfield"><label>Date of Birth</label><input type="date" id="editDob" value="${a.dob||''}" onchange="document.getElementById('editAgeOut').textContent=calcAge(this.value)!=null?('Age '+calcAge(this.value)):'';">
@@ -1846,13 +1887,16 @@ function readSecondaryRows(pgId, homePg){
 }
 function saveAthlete(id){
   const a = athletes.find(x=>x.id===id);
+  const nameEl = document.getElementById('editName');
+  const newName = nameEl ? (nameEl.value.trim() || a.name) : a.name;
   const newPg=document.getElementById('editPg').value, newSq=document.getElementById('editSquad').value,
         newClub=document.getElementById('editClub').value, newCat=document.getElementById('editCat').value,
         newDepth=document.getElementById('editDepth').value;
-  if(newSq!==a.squad) logMove(a.name,'Squad',a.squad,newSq);
-  if(newCat!==a.cat) logMove(a.name,'Readiness',a.cat,newCat);
-  if(newPg!==a.pg) logMove(a.name,'Position Group',a.pg,newPg);
-  a.pg=newPg; a.squad=newSq; a.club=newClub; a.cat=newCat;
+  if(newName!==a.name) logMove(a.name,'Name',a.name,newName);
+  if(newSq!==a.squad) logMove(newName,'Squad',a.squad,newSq);
+  if(newCat!==a.cat) logMove(newName,'Readiness',a.cat,newCat);
+  if(newPg!==a.pg) logMove(newName,'Position Group',a.pg,newPg);
+  a.name=newName; a.pg=newPg; a.squad=newSq; a.club=newClub; a.cat=newCat;
   const dobEl = document.getElementById('editDob');
   if(dobEl) a.dob = dobEl.value || null;
   // Watchlist status (extraWatch) is managed exclusively via openWatchlistOptions() /
